@@ -211,7 +211,7 @@ class Admin extends CI_Controller {
         return $users;
     }
 
-    public function addNewMember() {
+    public function AddNewMember() {
         if ($this->session->uname == NULL) {
             header('Location: /admin');
         } else {
@@ -250,12 +250,12 @@ class Admin extends CI_Controller {
         exit;
     }
 
-    public function addNewProduct() {
+    public function AddNewProduct() {
         if ($this->session->uname == NULL) {
             header('Location: /admin');
         } else {
             $this->load->view('Header');
-            $this->load->view('addNewProduct');
+            $this->load->view('AddNewProduct');
             $this->load->view('Footer');
         }
     }
@@ -273,12 +273,12 @@ class Admin extends CI_Controller {
             $error = array('error' => "<div class='alert alert-warning errmess' role='alert'><center>Please enter valid information. Try again.</center></div>");
             
             $this->load->view('Header');
-            $this->load->view('addNewProduct', $error);
+            $this->load->view('AddNewProduct', $error);
             $this->load->view('Footer');
         } else {
             $success = array('error' => "<div class='alert alert-success errmess' role='alert'><center>New product successfully added.</center></div>");
             $this->load->view('Header');
-            $this->load->view('addNewProduct', $success);
+            $this->load->view('AddNewProduct', $success);
             $this->load->view('Footer');
             $upload = array();
             $upload = $this->model->saveProductDetails($_POST,$this->upload->file_name);
@@ -296,11 +296,11 @@ class Admin extends CI_Controller {
 
         if (!$this->upload->do_upload('userfile') || $_POST['serviceName'] == "" || $_POST['serviceDescription'] == "" || $_POST['servicePrice'] == "") {
             $_SESSION['message'] = "<div class='alert alert-warning errmess' role='alert'><center>Please enter valid information. Try again.</center></div>";
-            header("location: /admin/addNewService/");
+            header("location: /admin/AddNewService/");
         } else {
             $_SESSION['message'] = "<div class='alert alert-success errmess' role='alert'><center>New service successfully added.</center></div>";           
             $this->model->saveServiceDetails($_POST, $this->upload->file_name);
-            header("location: /admin/addNewService/");
+            header("location: /admin/AddNewService/");
         }
     }
 
@@ -360,7 +360,7 @@ class Admin extends CI_Controller {
         exit;
     }
 
-    public function addNewDoctor() {
+    public function AddNewDoctor() {
         if ($this->session->uname == NULL) {
             header('Location: /admin');
         } else {
@@ -370,7 +370,7 @@ class Admin extends CI_Controller {
         }
     }
 
-    public function addNewService() {
+    public function AddNewService() {
         if ($this->session->uname == NULL) {
             header('Location: /admin');
         } else {
@@ -390,7 +390,7 @@ class Admin extends CI_Controller {
         }
     }
 
-    public function addNewPet() {
+    public function AddNewPet() {
         if ($this->session->uname == NULL) {
             header('Location: /admin');
         } else {
@@ -424,14 +424,14 @@ class Admin extends CI_Controller {
         return $specie;
     }
 
-    public function addNewUserAdmin() {
+    public function AddNewUserAdmin() {
         $data = array();
-        $data = $this->model->addNewUserAdminDetails($_POST);
+        $data = $this->model->AddNewUserAdminDetails($_POST);
         echo json_encode($data);
         exit;
     }
 
-    public function addNewDoctorDetails() {
+    public function AddNewDoctorDetails() {
         $data = array();
         $data = $this->model->insertDoctorDetails($_POST);
         echo json_encode($data);
@@ -475,7 +475,7 @@ class Admin extends CI_Controller {
 
     public function saveNewPet() {
         $data = array();
-        $data = $this->model->addNewPetDetails($_POST);
+        $data = $this->model->AddNewPetDetails($_POST);
         echo json_encode($data);
         exit;
     }
