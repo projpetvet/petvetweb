@@ -1,0 +1,214 @@
+/*primary color: #0c827f
+secondary color: #888539*/
+
+h1, h2, h3, h4, h5
+{
+    color: #0c827f;
+}
+
+body
+{
+    font-family: 'Poppins', sans-serif;
+}
+
+.navbar
+{
+    background: #0c827f;
+    border-radius: 0;
+}
+
+.navbar, .navbar a, navbar a:focus
+{
+    color: #fff;
+    transition: 0.5;
+}
+
+.navbar li:hover, .navbar li.open, .navbar li.open, .navbar li a:hover, .navbar li a:focus, .navbar li.open a:focus
+{
+    background: #0a6b68;
+}
+
+.left-nav
+{
+    padding: 0;
+    min-height: 100vh;
+    margin-top: 50px;
+}
+
+.left-nav-wrapper
+{
+    background: #016562;
+    position: fixed;
+    width: 170px;
+    height: 100%;
+}
+
+.left-nav ul
+{
+    margin-top: 20px;
+}
+
+.left-nav .list-group-item:first-child, .left-nav .list-group-item:last-child
+{
+    border-radius: 0
+}
+
+.left-nav .list-group-item
+{
+    background: none;
+    border: none;
+}
+
+.left-nav a, .left-nav a:hover, .left-nav a:focus
+{
+    color: #fff;
+    text-decoration: none;
+}
+
+.left-nav .list-group-item:hover
+{
+    background: #0a6b68;
+    color: #fff;
+    cursor: pointer;
+}
+
+.main-container
+{
+    margin-top: 80px;
+}
+
+.menu-toggle
+{
+    float: left;
+    padding: 15px;
+    text-align: center;
+    background: none;
+    outline: none;
+    border: none;
+    width: 60px;
+}
+
+.menu-toggle i
+{
+    font-size: 20px;
+}
+
+.menu-toggle.active
+{
+    background: #096562
+}
+
+.navbar-brand
+{
+    margin-left: -10px !important;
+}
+
+.container
+{
+    max-width: 100%;
+}
+
+#logInContainer
+{
+    width: 300px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+}
+
+.login-logo
+{
+    margin: 0 auto 10px;
+    display: block;
+}
+
+.btn-submit
+{
+    background: #0c827f;
+    color: #fff;
+    font-weight: 700;
+}
+
+.btn-submit:hover,.btn-submit:focus
+{
+    background: #0c5250;
+    color: #fff;
+}
+
+#logInStatus
+{
+    padding: 0;
+}
+
+.alert
+{
+    margin-bottom: 10px;
+}
+
+.form-group
+{
+    margin-bottom: 10px;
+}
+
+.addNewHeaderText
+{
+    font-size: 20px;
+    color: #0c827f;
+    font-weight: 700;
+    text-transform: uppercase;
+    padding: 0 15px 10px;
+}
+
+.btnAdd button
+{
+    background: #016562;
+    color: #fff;
+    margin-bottom: 10px;
+    float: right;
+}
+
+.btnAdd button:hover, .btnAdd button:focus
+{
+    background: #0c827f;
+    color: #fff;
+}
+
+.main-container 
+{
+    margin-bottom: 50px;
+}
+
+.tb-header
+{
+    background: #0c827f !important;
+    color: #fff;
+}
+
+.grand-total
+{
+    float: right;
+    color: #016562;
+    text-transform: uppercase;
+    font-weight: 700;
+}
+
+.centered
+{
+    text-align: center !important;
+}
+
+#orderStatus, #appStatus
+{
+    width: auto;
+}
+
+.thumbnail
+{
+    max-width: 100px;
+}
+
+#currentImage img
+{
+    max-width: 100px;
+}
