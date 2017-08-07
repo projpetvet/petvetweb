@@ -95,24 +95,51 @@ $db['default'] = array(
 	'save_queries' => TRUE
 );
 
-$db['pdo'] = array(
-    'dsn'   => 'mysql:host=localhost;dbname=vet',
-    //'hostname' => 'localhost',
-    'username' => 'root',
-    'password' => '',
-    'database' => 'vet',
-    'dbdriver' => 'pdo',
-    'dbprefix' => '',
-    'pconnect' => FALSE,
-    'db_debug' => (ENVIRONMENT !== 'production'),
-    'cache_on' => FALSE,
-    'cachedir' => '',
-    'char_set' => 'utf8',
-    'dbcollat' => 'utf8_general_ci',
-    'swap_pre' => '',
-    'encrypt' => FALSE,
-    'compress' => FALSE,
-    'stricton' => FALSE,
-    'failover' => array(),
-    'save_queries' => TRUE
-);
+if(IS_DEV)
+{
+    $db['pdo'] = array(
+        'dsn'   => 'mysql:host=localhost;dbname=vet',
+        //'hostname' => 'localhost',
+        'username' => 'root',
+        'password' => '',
+        'database' => 'vet',
+        'dbdriver' => 'pdo',
+        'dbprefix' => '',
+        'pconnect' => FALSE,
+        'db_debug' => (ENVIRONMENT !== 'production'),
+        'cache_on' => FALSE,
+        'cachedir' => '',
+        'char_set' => 'utf8',
+        'dbcollat' => 'utf8_general_ci',
+        'swap_pre' => '',
+        'encrypt' => FALSE,
+        'compress' => FALSE,
+        'stricton' => FALSE,
+        'failover' => array(),
+        'save_queries' => TRUE
+    );
+}
+else
+{
+    $db['pdo'] = array(
+        'dsn'   => 'mysql:host=localhost;dbname=id2242207_petvet',
+        //'hostname' => 'localhost',
+        'username' => 'id2242207_projpetvet',
+        'password' => '0717projpetvet',
+        'database' => 'id2242207_petvet',
+        'dbdriver' => 'pdo',
+        'dbprefix' => '',
+        'pconnect' => FALSE,
+        'db_debug' => (ENVIRONMENT !== 'production'),
+        'cache_on' => FALSE,
+        'cachedir' => '',
+        'char_set' => 'utf8',
+        'dbcollat' => 'utf8_general_ci',
+        'swap_pre' => '',
+        'encrypt' => FALSE,
+        'compress' => FALSE,
+        'stricton' => FALSE,
+        'failover' => array(),
+        'save_queries' => TRUE
+    );
+}
