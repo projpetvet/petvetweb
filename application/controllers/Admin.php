@@ -195,7 +195,7 @@ class Admin extends CI_Controller {
         } else {
             $data['users_list'] = $this->getUsersList();
             $this->load->view('Header', $data);
-            $this->load->view('userAdmin', $data);
+            $this->load->view('UserAdmin', $data);
             $this->load->view('Footer', $data);
         }
     }
