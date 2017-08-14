@@ -72,6 +72,18 @@ class Webservice extends CI_Controller {
         exit;
     }
     
+    public function UpdateProfile()
+    {
+        $json_data = array();
+        $json_data['success'] = $this->model->UpdateProfile($_POST);
+        if(!$json_data['success'])
+        {
+            $json_data['message'] = "Error in updating your account";
+        }
+        echo json_encode($json_data);
+        exit;
+    }
+    
     public function GetCustomerById()
     {
         $json_data = array();

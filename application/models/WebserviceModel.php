@@ -67,6 +67,49 @@ Class WebserviceModel extends CI_Model {
         }
     }
     
+    public function UpdateProfile($data)
+    {
+        try
+        {
+            extract($data);
+            if(trim($password) != '')
+            {
+                $password = sha1($password);
+                $sql = "UPDATE customer
+                        SET lastname = ?,
+                        firstname = ?,
+                        address = ?,
+                        mobile = ?,
+                        email = ?,
+                        username = ?,
+                        password = ?
+                        WHERE id = ?
+                        ";
+                $stmt = $this->pdo->query($sql,array($lastname,$firstname,$address,$mobile,$email,$username,$password,$id));
+                return $stmt;
+            }
+            else
+            {
+                $sql = "UPDATE customer
+                        SET lastname = ?,
+                        firstname = ?,
+                        address = ?,
+                        mobile = ?,
+                        email = ?,
+                        username = ?
+                        WHERE id = ?
+                        ";
+                $stmt = $this->pdo->query($sql,array($lastname,$firstname,$address,$mobile,$email,$username,$id));
+                return $stmt;
+            }
+        } 
+        catch (Exception $ex) 
+        {
+            echo $ex;
+            exit;
+        }
+    }
+    
     public function GetProducts()
     {
         try
