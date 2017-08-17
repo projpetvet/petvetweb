@@ -798,6 +798,23 @@ class Admin extends CI_Controller {
             $this->load->view('Footer');
         }
     }
+    
+    public function AddSpecie() {
+        if ($this->session->uname == NULL) {
+            header('Location: /admin');
+        } else {
+            $this->load->view('Header');
+            $this->load->view('AddSpecie');
+            $this->load->view('Footer');
+        }
+    }
+    
+    public function saveSpecie() {
+        $json_data = array();
+        $json_data['success'] = $this->model->SaveSpecie($_POST['specie']);
+        echo json_encode($json_data);
+        exit;
+    }
 }
 
 ?>

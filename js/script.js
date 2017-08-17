@@ -469,6 +469,44 @@ $(document).ready(function ()
             });
         }
     });
+    
+    $('#btnAddSpecie').click(function () {
+        var specie = $('#specieName').val();
+
+        $('#saveStatus').html(" ");
+        if (specie.trim() == "")
+        {
+            $("#saveStatus").append('<div class="alert alert-warning">' +
+                    '<strong>Please enter complete details. Try again.</strong>' +
+                    '</div>');
+        } else
+        {
+            $.ajax({
+                url: "/admin/saveSpecie",
+                type: "POST",
+                data: {
+                    specie: specie
+                },
+                dataType: "json",
+                success: function (data)
+                {
+                    if(data.success)
+                    {
+                        $("#saveStatus").append('<div class="alert alert-success">' +
+                                '<strong>Specie successfully added.</strong>' +
+                                '</div>');
+                        $('#specieName').val('');
+                    }
+                    else
+                    {
+                        $("#saveStatus").append('<div class="alert alert-warning">' +
+                        '<strong>Error saving to the database. Try again.</strong>' +
+                        '</div>');
+                    }
+                }
+            });
+        }
+    });
 
     $(document).on("click", "#btnUpdatePet", function () {
         var data = {

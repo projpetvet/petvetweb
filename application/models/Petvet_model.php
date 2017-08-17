@@ -503,8 +503,23 @@ class Petvet_model extends CI_Model {
     {
         try
         {
-            $sql = "SELECT * FROM specie";
+            $sql = "SELECT * FROM specie ORDER BY name";
             $stmt = $this->pdo->query($sql);
+            return $stmt;
+        } 
+        catch (Exception $ex) 
+        {
+            echo $ex;
+            exit;
+        }
+    }
+    
+    public function SaveSpecie($specie)
+    {
+        try
+        {
+            $sql = "INSERT INTO specie SET name = ?";
+            $stmt = $this->pdo->query($sql,array($specie));
             return $stmt;
         } 
         catch (Exception $ex) 

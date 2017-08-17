@@ -212,3 +212,20 @@ body
 {
     max-width: 100px;
 }
+
+.no-gutter
+{
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.left-header
+{
+    float: left;
+    margin: 0;
+}
+
+.btn-space
+{
+    margin-top: 8px;
+}
