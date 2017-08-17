@@ -779,6 +779,25 @@ class Admin extends CI_Controller {
         $this->load->view('EditUserAdmin',$data);
         $this->load->view('Footer');
     }    
+    
+    public function Species()
+    {
+        if ($this->session->uname == NULL) {
+            header('Location: /admin');
+        } else {
+            $data = array();
+            $data['list'] = '';
+            $stmt = $this->model->GetSpecies();
+            foreach ($stmt->result() as $row)
+            {
+                $data['list'] .= $this->load->view("SpeciesList",$row,TRUE);
+            }
+            
+            $this->load->view('Header');
+            $this->load->view('Species',$data);
+            $this->load->view('Footer');
+        }
+    }
 }
 
 ?>

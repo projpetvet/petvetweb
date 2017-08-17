@@ -58,6 +58,12 @@
                     <a href="/admin/pets">
                         <li class="list-group-item">Pets </li>
                     </a>
+                    <a href="/admin/species">
+                        <li class="list-group-item">Species </li>
+                    </a>
+                    <a href="/admin/breeds">
+                        <li class="list-group-item">Breeds </li>
+                    </a>
                     <a href="/admin/useradmin">
                         <li class="list-group-item">User Admin </li>
                     </a>

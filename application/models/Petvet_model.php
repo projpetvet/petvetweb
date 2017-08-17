@@ -498,5 +498,20 @@ class Petvet_model extends CI_Model {
             exit;
         }
     }
+    
+    public function GetSpecies()
+    {
+        try
+        {
+            $sql = "SELECT * FROM specie";
+            $stmt = $this->pdo->query($sql);
+            return $stmt;
+        } 
+        catch (Exception $ex) 
+        {
+            echo $ex;
+            exit;
+        }
+    }
 }
 ?>
