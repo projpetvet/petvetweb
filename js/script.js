@@ -789,4 +789,75 @@ $(document).ready(function ()
         return false;
     });
     
+    $(".edit_specie").click(function(){
+        $("#edit_specie_id").val('');
+        $("#edit_specie_name").val('');
+        var id = $(this).attr('data-id');
+        var name = $(this).attr('data-name');
+        $("#editSpecieModal").modal('show');
+        $("#edit_specie_name").val(name);
+        $("#edit_specie_id").val(id);
+    });
+    
+    $(".delete_specie").click(function(){
+        var id = $(this).attr('data-id');
+        var is_delete = confirm("Are you sure you want to delete this specie?");
+        if(is_delete)
+        {
+            $.ajax({
+                url : "/admin/deleteSpecie",
+                method : "POST",
+                data : {
+                    id : id
+                },
+                dataType : "json",
+                success : function(data)
+                {
+                    if(data.success)
+                    {
+                        alert("Specie successfully deleted");
+                        window.location.reload();
+                    }
+                    else
+                    {
+                        alert("Error connecting to server.");
+                    }
+                },
+                error : function()
+                {
+                    alert("Error connecting to server.");
+                }
+            });
+        }
+    });
+    
+    $("#btnUpdateSpecie").click(function(){
+       var data = {
+         id : $("#edit_specie_id").val(),
+         name : $("#edit_specie_name").val()
+       };
+       
+       $.ajax({
+            url : "/admin/updateSpecie",
+            method : "POST",
+            data : data,
+            dataType : "json",
+            success : function(data)
+            {
+                if(data.success)
+                {
+                    alert("Specie successfully updated");
+                    window.location.reload();
+                }
+                else
+                {
+                    alert("Error connecting to server.");
+                }
+            },
+            error : function()
+            {
+                alert("Error connecting to server.");
+            }
+        });
+    });
 });

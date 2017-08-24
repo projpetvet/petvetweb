@@ -815,6 +815,36 @@ class Admin extends CI_Controller {
         echo json_encode($json_data);
         exit;
     }
+    
+    public function UpdateSpecie()
+    {
+        $json_data = array();
+        if(isset($_POST['id']) && isset($_POST['name']))
+        {
+            $json_data['success'] = $this->model->UpdateSpecie($_POST);
+        }
+        else
+        {
+            $json_data['success'] = FALSE;
+        }
+        echo json_encode($json_data);
+        exit;
+    }
+    
+    public function DeleteSpecie()
+    {
+        $json_data = array();
+        if(isset($_POST['id']))
+        {
+            $json_data['success'] = $this->model->DeleteSpecie($_POST['id']);
+        }
+        else
+        {
+            $json_data['success'] = FALSE;
+        }
+        echo json_encode($json_data);
+        exit;
+    }
 }
 
 ?>

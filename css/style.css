@@ -229,3 +229,8 @@ body
 {
     margin-top: 8px;
 }
+
+.pointer-link
+{
+    cursor: pointer;
+}

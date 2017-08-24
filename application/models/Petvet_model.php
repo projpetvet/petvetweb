@@ -528,5 +528,36 @@ class Petvet_model extends CI_Model {
             exit;
         }
     }
+    
+    public function UpdateSpecie($data)
+    {
+        try
+        {
+            extract($data);
+            $sql = "UPDATE specie SET name = ? WHERE id = ?";
+            $stmt = $this->pdo->query($sql,array($name,$id));
+            return $stmt;
+        } 
+        catch (Exception $ex) 
+        {
+            echo $ex;
+            exit;
+        }
+    }
+    
+    public function DeleteSpecie($id)
+    {
+        try
+        {
+            $sql = "DELETE FROM specie WHERE id = ?";
+            $stmt = $this->pdo->query($sql,array($id));
+            return $stmt;
+        } 
+        catch (Exception $ex) 
+        {
+            echo $ex;
+            exit;
+        }
+    }
 }
 ?>
