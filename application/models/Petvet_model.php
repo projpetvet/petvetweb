@@ -62,8 +62,8 @@ class Petvet_model extends CI_Model {
     public function saveProductDetails($data,$savedImage) {
         extract($data);
         $productDescriptionEncoded = htmlentities($productDescription);
-        $insertProduct = "INSERT INTO product(name, description, price, image, enabled) VALUES(?, ?, ?, ?, ?)";
-        $this->pdo->query($insertProduct, array($productName, $productDescriptionEncoded, $productPrice, $savedImage, 1));
+        $insertProduct = "INSERT INTO product(name, description, price, stock, image, enabled) VALUES(?, ?, ?, ?, ?, ?)";
+        $this->pdo->query($insertProduct, array($productName, $productDescriptionEncoded, $productPrice, $productStock, $savedImage, 1));
     }
 
     public function saveServiceDetails($data,$savedImage) {
@@ -83,8 +83,8 @@ class Petvet_model extends CI_Model {
     public function updateProductDetails($data) {
         extract($data);
         $editProductDescriptionEncoded = htmlentities($editProductDescription);
-        $insertService = "UPDATE product SET name = ?, description = ?, price = ? WHERE id = ?";
-        $this->pdo->query($insertService, array($editProductName, $editProductDescriptionEncoded, $editProductPrice, $edit_id));
+        $insertService = "UPDATE product SET name = ?, description = ?, price = ?, stock = ? WHERE id = ?";
+        $this->pdo->query($insertService, array($editProductName, $editProductDescriptionEncoded, $editProductPrice, $editProductStock, $edit_id));
     }
     
     public function updateProductImage($id,$image)

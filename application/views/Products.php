@@ -12,6 +12,7 @@
                     <tr class="tb-header">
                         <th>Product Name</th>
                         <th>Price</th>
+                        <th>Stock</th>
                         <th>Preview</th>
                         <th>Actions</th>
                     </tr>

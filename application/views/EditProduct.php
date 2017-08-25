@@ -25,6 +25,11 @@
                 <input type="number" class="form-control" name="editProductPrice" id="editProductPrice" placeholder="Product Price" required/>
                 <br/>
             </div>
+            <div class="col-sm-6">
+                <br/>
+                <input type="number" class="form-control" name="editProductStock" id="editProductStock" placeholder="Product Stocks" required/>
+                <br/>
+            </div>
             <div class="col-sm-12">
                 Current Image:
                 <div id="currentImage"></div>
@@ -60,6 +65,7 @@
                     tinyMCE.activeEditor.setContent(data['decoded']);
                 }, 1000);
                 $('#editProductPrice').val(data[0]['price']);
+                $('#editProductStock').val(data[0]['stock']);
                 $('#currentImage').html("<img src='" + window.location.origin + "/www/images/products/" + data[0]['image'] + "' style='width:300px'>");
             }
         });

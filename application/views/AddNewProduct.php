@@ -24,6 +24,11 @@
                 <input type="number" class="form-control" name="productPrice" id="productPrice" placeholder="Product Price" required/>
                 <br/>
             </div>
+            <div class="col-sm-6">
+                <br/>
+                <input type="number" class="form-control" name="productStock" id="productStock" placeholder="Product Stocks" required/>
+                <br/>
+            </div>
             <div class="col-sm-12" id="uploadDiv">
                 <label>Product Image:</label>
                 <input id="file" name="userfile" type="file" required/>

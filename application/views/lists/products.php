@@ -1,6 +1,7 @@
 <tr id="product<?php echo $id; ?>">
 	<td><?php echo $name; ?></td>
 	<td><?php echo $price; ?></td>
+	<td><?php echo $stock; ?></td>
 	<td>
             <img class="thumbnail" src="/www/images/products/<?php echo $image; ?>">
 	</td>

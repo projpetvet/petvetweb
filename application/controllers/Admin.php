@@ -269,7 +269,7 @@ class Admin extends CI_Controller {
 
         $this->load->library('upload', $config);
 
-        if (!$this->upload->do_upload('userfile') || $_POST['productName'] == "" || $_POST['productPrice'] == "") {
+        if (!$this->upload->do_upload('userfile') || $_POST['productName'] == "" || $_POST['productPrice'] == "" || $_POST['productStock'] == "") {
             $error = array('error' => "<div class='alert alert-warning errmess' role='alert'><center>Please enter valid information. Try again.</center></div>");
             
             $this->load->view('Header');
