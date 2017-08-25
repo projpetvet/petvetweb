@@ -3,7 +3,7 @@
         <div class="main-container col-xs-12">
             <h1 class="left-header">Breeds</h1>
             <div class="btnAdd pull-right">
-                <a href="/admin/addSpecie">
+                <a href="/admin/addBreed">
                     <button class="btn btn-default">Add Breed</button>
                 </a>
             </div>

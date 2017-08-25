@@ -590,12 +590,13 @@ class Petvet_model extends CI_Model {
         }
     }
     
-    public function SaveBreed($specie)
+    public function SaveBreed($data)
     {
         try
         {
-            $sql = "INSERT INTO specie SET name = ?";
-            $stmt = $this->pdo->query($sql,array($specie));
+            extract($data);
+            $sql = "INSERT INTO breed SET name = ?, specie_id = ?";
+            $stmt = $this->pdo->query($sql,array($name,$specie));
             return $stmt;
         } 
         catch (Exception $ex) 

@@ -876,15 +876,17 @@ class Admin extends CI_Controller {
         if ($this->session->uname == NULL) {
             header('Location: /admin');
         } else {
+            $data = array();
+            $data['specie_list'] = $this->BuildSpeciesSelection();
             $this->load->view('Header');
-            $this->load->view('AddBreed');
+            $this->load->view('AddBreed',$data);
             $this->load->view('Footer');
         }
     }
     
     public function saveBreed() {
         $json_data = array();
-        $json_data['success'] = $this->model->SaveBreed($_POST['specie']);
+        $json_data['success'] = $this->model->SaveBreed($_POST);
         echo json_encode($json_data);
         exit;
     }
@@ -922,6 +924,24 @@ class Admin extends CI_Controller {
     public function BuildSpecies($selected = 0)
     {
         $options = '<option value="">All Species</option>';
+        $stmt = $this->model->GetSpecies();
+        foreach($stmt->result() as $row)
+        {
+            if($selected == $row->id)
+            {
+                $options .= '<option value="'.$row->id.'" selected>'.$row->name.'</option>';
+            }
+            else
+            {
+                $options .= '<option value="'.$row->id.'">'.$row->name.'</option>';
+            }
+        }
+        return $options;
+    }
+    
+    public function BuildSpeciesSelection($selected = 0)
+    {
+        $options = '<option value=""></option>';
         $stmt = $this->model->GetSpecies();
         foreach($stmt->result() as $row)
         {

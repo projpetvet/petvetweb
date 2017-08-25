@@ -865,4 +865,45 @@ $(document).ready(function ()
        var id = $(this).val();
        window.location.href = '/admin/breeds/'+id;
     });
+    
+    $("#frmBreed").submit(function(){
+        var name = $("#breedName").val();
+        var specie = $("#specie").val();
+        var data = {
+            name : name,
+            specie : specie
+        };
+        
+        $.ajax({
+            url : "/admin/saveBreed",
+            method : "POST",
+            data : data,
+            dataType : "json",
+            success : function(data)
+            {
+                if(data.success)
+                {
+                    $("#saveStatus").append('<div class="alert alert-success">' +
+                                '<strong>Breed successfully added</strong>' +
+                                '</div>');
+                    $("#breedName").val('');
+                    $("#specie").val('');
+                }
+                else
+                {
+                    $("#saveStatus").append('<div class="alert alert-warning">' +
+                    '<strong>Error connecting to server.</strong>' +
+                    '</div>');
+                }
+            },
+            error : function()
+            {
+                $("#saveStatus").append('<div class="alert alert-warning">' +
+                    '<strong>Error connecting to server.</strong>' +
+                    '</div>');
+            }
+        });
+        
+        return false; 
+    });
 });
