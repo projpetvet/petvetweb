@@ -49,14 +49,14 @@ $(document).ready(function ()
         $("#saveStatus").html("");
         if (firstName == "" || lastName == "" || address == "" || mobileNumber == "" || emailAddress == "" || userName == "" || password == "" || confirmPassword == "")
         {
-            $("#saveStatus").append('<div class="alert alert-warning">' +
+            $("#saveStatus").html('<div class="alert alert-warning">' +
                     '<strong>Please enter complete details. Try again.</strong>' +
                     '</div>');
         } else
         {
             if (password != confirmPassword)
             {
-                $("#saveStatus").append('<div class="alert alert-danger">' +
+                $("#saveStatus").html('<div class="alert alert-danger">' +
                         '<strong>Password do not match. Try again.</strong>' +
                         '</div>');
             } else
@@ -77,7 +77,7 @@ $(document).ready(function ()
                     dataType: "json",
                     success: function (data)
                     {
-                        $("#saveStatus").append('<div class="alert alert-success">' +
+                        $("#saveStatus").html('<div class="alert alert-success">' +
                                 '<strong>' + data + '</strong>' +
                                 '</div>');
                     }
@@ -215,7 +215,7 @@ $(document).ready(function ()
         $("#saveStatus").html("");
         if (firstName == "" || lastName == "" || mobileNumber == "" || timeIn == "" || timeOut == "")
         {
-            $("#saveStatus").append('<div class="alert alert-warning">' +
+            $("#saveStatus").html('<div class="alert alert-warning">' +
                     '<strong>Please enter needed details. Try again.</strong>' +
                     '</div>');
         } else
@@ -240,7 +240,7 @@ $(document).ready(function ()
                 dataType: "json",
                 success: function (data)
                 {
-                    $("#saveStatus").append('<div class="alert alert-success">' +
+                    $("#saveStatus").html('<div class="alert alert-success">' +
                             '<strong>' + data + '</strong>' +
                             '</div>');
                     $('#firstName').val("");
@@ -262,7 +262,7 @@ $(document).ready(function ()
         $("#saveStatus").html("");
         if (userName == "" || password == "" || confirmPassword == "")
         {
-            $("#saveStatus").append('<div class="alert alert-warning">' +
+            $("#saveStatus").html('<div class="alert alert-warning">' +
                     '<strong>Please enter complete details. Try again.</strong>' +
                     '</div>');
         } else
@@ -279,7 +279,7 @@ $(document).ready(function ()
                     dataType: "json",
                     success: function (data)
                     {
-                        $("#saveStatus").append('<div class="alert alert-success">' +
+                        $("#saveStatus").html('<div class="alert alert-success">' +
                                 '<strong>' + data + '</strong>' +
                                 '</div>');
                         $('#userName').val("");
@@ -289,7 +289,7 @@ $(document).ready(function ()
                 });
             } else
             {
-                $("#saveStatus").append('<div class="alert alert-danger">' +
+                $("#saveStatus").html('<div class="alert alert-danger">' +
                         '<strong>Password do not match. Try again.</strong>' +
                         '</div>');
             }
@@ -444,7 +444,7 @@ $(document).ready(function ()
         $('#saveStatus').html(" ");
         if (petName == "" || specie == null || breed == null)
         {
-            $("#saveStatus").append('<div class="alert alert-warning">' +
+            $("#saveStatus").html('<div class="alert alert-warning">' +
                     '<strong>Please enter complete details. Try again.</strong>' +
                     '</div>');
         } else
@@ -462,7 +462,7 @@ $(document).ready(function ()
                 dataType: "json",
                 success: function (data)
                 {
-                    $("#saveStatus").append('<div class="alert alert-success">' +
+                    $("#saveStatus").html('<div class="alert alert-success">' +
                             '<strong>' + data + '</strong>' +
                             '</div>');
                 }
@@ -476,7 +476,7 @@ $(document).ready(function ()
         $('#saveStatus').html(" ");
         if (specie.trim() == "")
         {
-            $("#saveStatus").append('<div class="alert alert-warning">' +
+            $("#saveStatus").html('<div class="alert alert-warning">' +
                     '<strong>Please enter complete details. Try again.</strong>' +
                     '</div>');
         } else
@@ -492,14 +492,14 @@ $(document).ready(function ()
                 {
                     if(data.success)
                     {
-                        $("#saveStatus").append('<div class="alert alert-success">' +
+                        $("#saveStatus").html('<div class="alert alert-success">' +
                                 '<strong>Specie successfully added.</strong>' +
                                 '</div>');
                         $('#specieName').val('');
                     }
                     else
                     {
-                        $("#saveStatus").append('<div class="alert alert-warning">' +
+                        $("#saveStatus").html('<div class="alert alert-warning">' +
                         '<strong>Error saving to the database. Try again.</strong>' +
                         '</div>');
                     }
@@ -883,22 +883,63 @@ $(document).ready(function ()
             {
                 if(data.success)
                 {
-                    $("#saveStatus").append('<div class="alert alert-success">' +
-                                '<strong>Breed successfully added</strong>' +
+                    $("#saveStatus").html('<div class="alert alert-success">' +
+                                '<strong>Breed successfully added.</strong>' +
                                 '</div>');
                     $("#breedName").val('');
                     $("#specie").val('');
                 }
                 else
                 {
-                    $("#saveStatus").append('<div class="alert alert-warning">' +
+                    $("#saveStatus").html('<div class="alert alert-warning">' +
                     '<strong>Error connecting to server.</strong>' +
                     '</div>');
                 }
             },
             error : function()
             {
-                $("#saveStatus").append('<div class="alert alert-warning">' +
+                $("#saveStatus").html('<div class="alert alert-warning">' +
+                    '<strong>Error connecting to server.</strong>' +
+                    '</div>');
+            }
+        });
+        
+        return false; 
+    });
+    
+    $("#frmEditBreed").submit(function(){
+        var name = $("#breedName").val();
+        var specie = $("#specie").val();
+        var id = $("#edit_id").val();
+        var data = {
+            name : name,
+            specie : specie,
+            id : id
+        };
+        
+        $.ajax({
+            url : "/admin/updateBreed",
+            method : "POST",
+            data : data,
+            dataType : "json",
+            success : function(data)
+            {
+                if(data.success)
+                {
+                    $("#saveStatus").html('<div class="alert alert-success">' +
+                                '<strong>Breed successfully updated.</strong>' +
+                                '</div>');
+                }
+                else
+                {
+                    $("#saveStatus").html('<div class="alert alert-warning">' +
+                    '<strong>Error connecting to server.</strong>' +
+                    '</div>');
+                }
+            },
+            error : function()
+            {
+                $("#saveStatus").html('<div class="alert alert-warning">' +
                     '<strong>Error connecting to server.</strong>' +
                     '</div>');
             }

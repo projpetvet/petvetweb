@@ -884,6 +884,28 @@ class Admin extends CI_Controller {
         }
     }
     
+    public function EditBreed() {
+        if ($this->session->uname == NULL) {
+            header('Location: /admin');
+        } else {
+            $data = array();
+            $id = 0;
+            if(isset($GLOBALS['params'][0]))
+            {
+                $id = $GLOBALS['params'][0];
+            }
+            
+            $breed = $this->model->GetBreed($id);
+            $breed_data = $breed->result()[0];
+            $data['name'] = $breed_data->name;
+            $data['id'] = $breed_data->id;
+            $data['specie_list'] = $this->BuildSpeciesSelection($breed_data->specie_id);
+            $this->load->view('Header');
+            $this->load->view('EditBreed',$data);
+            $this->load->view('Footer');
+        }
+    }
+    
     public function saveBreed() {
         $json_data = array();
         $json_data['success'] = $this->model->SaveBreed($_POST);
@@ -894,7 +916,7 @@ class Admin extends CI_Controller {
     public function UpdateBreed()
     {
         $json_data = array();
-        if(isset($_POST['id']) && isset($_POST['name']))
+        if(isset($_POST['id']) && isset($_POST['name']) && isset($_POST['specie']))
         {
             $json_data['success'] = $this->model->UpdateBreed($_POST);
         }

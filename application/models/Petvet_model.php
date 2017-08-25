@@ -590,6 +590,21 @@ class Petvet_model extends CI_Model {
         }
     }
     
+    public function GetBreed($id)
+    {
+        try
+        {
+            $sql = "SELECT * FROM breed WHERE id = ?";
+            $stmt = $this->pdo->query($sql,array($id));
+            return $stmt;
+        } 
+        catch (Exception $ex) 
+        {
+            echo $ex;
+            exit;
+        }
+    }
+    
     public function SaveBreed($data)
     {
         try
@@ -611,8 +626,8 @@ class Petvet_model extends CI_Model {
         try
         {
             extract($data);
-            $sql = "UPDATE specie SET name = ? WHERE id = ?";
-            $stmt = $this->pdo->query($sql,array($name,$id));
+            $sql = "UPDATE breed SET name = ?, specie_id = ? WHERE id = ?";
+            $stmt = $this->pdo->query($sql,array($name,$specie,$id));
             return $stmt;
         } 
         catch (Exception $ex) 
