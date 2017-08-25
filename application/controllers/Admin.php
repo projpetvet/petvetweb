@@ -845,6 +845,97 @@ class Admin extends CI_Controller {
         echo json_encode($json_data);
         exit;
     }
+    public function Breeds()
+    {
+        if ($this->session->uname == NULL) {
+            header('Location: /admin');
+        } else {
+            $data = array();
+            
+            $selected = 0;
+            if(isset($GLOBALS['params'][0]))
+            {
+                $selected = $GLOBALS['params'][0];
+            }
+            $data['specie_list'] = $this->BuildSpecies($selected);
+            
+            $data['list'] = '';
+            $stmt = $this->model->GetBreeds($selected);
+            foreach ($stmt->result() as $row)
+            {
+                $data['list'] .= $this->load->view("BreedsList",$row,TRUE);
+            }
+            
+            $this->load->view('Header');
+            $this->load->view('Breeds',$data);
+            $this->load->view('Footer');
+        }
+    }
+    
+    public function AddBreed() {
+        if ($this->session->uname == NULL) {
+            header('Location: /admin');
+        } else {
+            $this->load->view('Header');
+            $this->load->view('AddBreed');
+            $this->load->view('Footer');
+        }
+    }
+    
+    public function saveBreed() {
+        $json_data = array();
+        $json_data['success'] = $this->model->SaveBreed($_POST['specie']);
+        echo json_encode($json_data);
+        exit;
+    }
+    
+    public function UpdateBreed()
+    {
+        $json_data = array();
+        if(isset($_POST['id']) && isset($_POST['name']))
+        {
+            $json_data['success'] = $this->model->UpdateBreed($_POST);
+        }
+        else
+        {
+            $json_data['success'] = FALSE;
+        }
+        echo json_encode($json_data);
+        exit;
+    }
+    
+    public function DeleteBreed()
+    {
+        $json_data = array();
+        if(isset($_POST['id']))
+        {
+            $json_data['success'] = $this->model->DeleteBreed($_POST['id']);
+        }
+        else
+        {
+            $json_data['success'] = FALSE;
+        }
+        echo json_encode($json_data);
+        exit;
+    }
+    
+    public function BuildSpecies($selected = 0)
+    {
+        $options = '<option value="">All Species</option>';
+        $stmt = $this->model->GetSpecies();
+        foreach($stmt->result() as $row)
+        {
+            if($selected == $row->id)
+            {
+                $options .= '<option value="'.$row->id.'" selected>'.$row->name.'</option>';
+            }
+            else
+            {
+                $options .= '<option value="'.$row->id.'">'.$row->name.'</option>';
+            }
+        }
+        return $options;
+    }
 }
 
 ?>

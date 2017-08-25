@@ -860,4 +860,9 @@ $(document).ready(function ()
             }
         });
     });
+    
+    $("#specieSelector").change(function(){
+       var id = $(this).val();
+       window.location.href = '/admin/breeds/'+id;
+    });
 });

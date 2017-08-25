@@ -559,5 +559,81 @@ class Petvet_model extends CI_Model {
             exit;
         }
     }
+    
+    public function GetBreeds($selected)
+    {
+        try
+        {
+            if($selected == 0)
+            {
+                $sql = "SELECT b.*,s.name as specie FROM breed as b
+                        INNER JOIN specie as s
+                        ON b.specie_id = s.id
+                        ORDER BY name";
+                $stmt = $this->pdo->query($sql);
+            }
+            else
+            {
+                $sql = "SELECT b.*,s.name as specie FROM breed as b
+                        INNER JOIN specie as s
+                        ON b.specie_id = s.id
+                        WHERE s.id = ?
+                        ORDER BY name";
+                $stmt = $this->pdo->query($sql,array($selected));
+            }
+            return $stmt;
+        } 
+        catch (Exception $ex) 
+        {
+            echo $ex;
+            exit;
+        }
+    }
+    
+    public function SaveBreed($specie)
+    {
+        try
+        {
+            $sql = "INSERT INTO specie SET name = ?";
+            $stmt = $this->pdo->query($sql,array($specie));
+            return $stmt;
+        } 
+        catch (Exception $ex) 
+        {
+            echo $ex;
+            exit;
+        }
+    }
+    
+    public function UpdateBreed($data)
+    {
+        try
+        {
+            extract($data);
+            $sql = "UPDATE specie SET name = ? WHERE id = ?";
+            $stmt = $this->pdo->query($sql,array($name,$id));
+            return $stmt;
+        } 
+        catch (Exception $ex) 
+        {
+            echo $ex;
+            exit;
+        }
+    }
+    
+    public function DeleteBreed($id)
+    {
+        try
+        {
+            $sql = "DELETE FROM specie WHERE id = ?";
+            $stmt = $this->pdo->query($sql,array($id));
+            return $stmt;
+        } 
+        catch (Exception $ex) 
+        {
+            echo $ex;
+            exit;
+        }
+    }
 }
 ?>
