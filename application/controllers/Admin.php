@@ -695,6 +695,16 @@ class Admin extends CI_Controller {
     {
         $json_data = array();
         $json_data['success'] = $this->model->ChangeOrderStatus($_POST['order_id'],$_POST['status']);
+        //COMPLETED - deducts the items of products
+        if($_POST['status'] == 4)
+        {
+            $products = $this->model->GetOrderLineByOrderId($_POST['order_id']);
+            foreach ($products->result() as $prod)
+            {
+                $this->model->UpdateProductStock($prod->product_id,$prod->quantity);
+            }
+        }
+        
         echo json_encode($json_data);
         exit;
     }

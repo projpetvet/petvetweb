@@ -659,5 +659,20 @@ class Petvet_model extends CI_Model {
             exit;
         }
     }
+    
+    public function UpdateProductStock($id,$deduct_quantity)
+    {
+        try
+        {
+            $sql = "UPDATE product SET stock = (stock - ?) WHERE id = ?";
+            $stmt = $this->pdo->query($sql,array($deduct_quantity,$id));
+            return $stmt;
+        } 
+        catch (Exception $ex) 
+        {
+            echo $ex;
+            exit;
+        }
+    }
 }
 ?>
