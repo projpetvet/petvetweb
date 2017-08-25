@@ -377,6 +377,23 @@ Class WebserviceModel extends CI_Model {
             exit;
         }
     }
+    
+    public function CancelAppointment($id)
+    {
+        try
+        {
+            $sql = "UPDATE appointment
+                    SET status = 5
+                    WHERE id = ?";
+            $stmt = $this->pdo->query($sql,array($id));
+            return $stmt;
+        } 
+        catch (Exception $ex) 
+        {
+            echo $ex;
+            exit;
+        }
+    }
 }
 
 ?> 
