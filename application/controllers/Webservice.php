@@ -314,4 +314,16 @@ class Webservice extends CI_Controller {
         echo json_encode($json_data);
         exit;
     }
+    
+    public function CancelOrder()
+    {
+        $json_data = array();
+        $json_data['success'] = $this->model->CancelOrder($_POST['id']);
+        if(!$json_data['success'])
+        {
+            $json_data['message'] = "An error occured.";
+        }
+        echo json_encode($json_data);
+        exit;
+    }
 }
