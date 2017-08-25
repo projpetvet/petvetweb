@@ -411,6 +411,60 @@ Class WebserviceModel extends CI_Model {
             exit;
         }
     }
+    
+    public function GetSpecies()
+    {
+        try
+        {
+            $sql = "SELECT * FROM specie ORDER BY name";
+            $stmt = $this->pdo->query($sql);
+            return $stmt;
+        } 
+        catch (Exception $ex) 
+        {
+            echo $ex;
+            exit;
+        }
+    }
+    
+    public function GetBreedsBySpecieId($specie)
+    {
+        try
+        {
+            $sql = "SELECT * FROM breed
+                    WHERE specie_id = ?
+                    ORDER BY name";
+            $stmt = $this->pdo->query($sql,array($specie));
+            return $stmt;
+        } 
+        catch (Exception $ex) 
+        {
+            echo $ex;
+            exit;
+        }
+    }
+    
+    public function SavePet($data)
+    {
+        try
+        {
+            extract($data);
+            $sql = "INSERT INTO pet
+                    SET owner_id = ?,
+                    name = ?,
+                    breed_id = ?,
+                    specie_id = ?,
+                    sex = ?
+                    ";
+            $stmt = $this->pdo->query($sql,array($customer,$name,$breed,$specie,$gender));
+            return $stmt;
+        } 
+        catch (Exception $ex) 
+        {
+            echo $ex;
+            exit;
+        }
+    }
 }
 
 ?> 

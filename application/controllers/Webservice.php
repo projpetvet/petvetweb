@@ -326,4 +326,32 @@ class Webservice extends CI_Controller {
         echo json_encode($json_data);
         exit;
     }
+    
+    public function GetSpecies()
+    {
+        $json_data = array();
+        $species = $this->model->GetSpecies();
+        $json_data['list'] = $species->result();
+        $json_data['success'] = TRUE;
+        echo json_encode($json_data);
+        exit;
+    }
+    
+    public function GetBreeds()
+    {
+        $json_data = array();
+        $breeds = $this->model->GetBreedsBySpecieId($_POST['id']);
+        $json_data['list'] = $breeds->result();
+        $json_data['success'] = TRUE;
+        echo json_encode($json_data);
+        exit;
+    }
+    
+    public function SavePet()
+    {
+        $json_data = array();
+        $json_data['success'] = $this->model->SavePet($_POST);
+        echo json_encode($json_data);
+        exit;
+    }
 }
