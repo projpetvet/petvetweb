@@ -316,22 +316,41 @@ class Petvet_model extends CI_Model {
         }
     }
     
-    public function GetAppointments()
+    public function GetAppointments($selected_status = 0)
     {
         try
         {
-            $sql = "SELECT a.*, CONCAT(c.firstname,' ',c.lastname) as customer,
-                    CONCAT(d.firstname,' ',d.lastname) as doctor,
-                    p.name as pet
-                    FROM appointment as a
-                    INNER JOIN customer as c
-                    ON a.customer_id = c.id
-                    INNER JOIN doctor as d
-                    ON a.doctor_id = d.id
-                    INNER JOIN pet as p
-                    ON a.pet_id = p.id
-                    ORDER BY a.id DESC";
-            $stmt = $this->pdo->query($sql);
+            if($selected_status == 0)
+            {
+                $sql = "SELECT a.*, CONCAT(c.firstname,' ',c.lastname) as customer,
+                        CONCAT(d.firstname,' ',d.lastname) as doctor,
+                        p.name as pet
+                        FROM appointment as a
+                        INNER JOIN customer as c
+                        ON a.customer_id = c.id
+                        INNER JOIN doctor as d
+                        ON a.doctor_id = d.id
+                        INNER JOIN pet as p
+                        ON a.pet_id = p.id
+                        ORDER BY a.id DESC";
+                $stmt = $this->pdo->query($sql);
+            }
+            else
+            {
+                $sql = "SELECT a.*, CONCAT(c.firstname,' ',c.lastname) as customer,
+                        CONCAT(d.firstname,' ',d.lastname) as doctor,
+                        p.name as pet
+                        FROM appointment as a
+                        INNER JOIN customer as c
+                        ON a.customer_id = c.id
+                        INNER JOIN doctor as d
+                        ON a.doctor_id = d.id
+                        INNER JOIN pet as p
+                        ON a.pet_id = p.id
+                        WHERE a.status = ?
+                        ORDER BY a.id DESC";
+                $stmt = $this->pdo->query($sql,array($selected_status));
+            }
             return $stmt;
         } 
         catch (Exception $ex) 

@@ -723,8 +723,16 @@ class Admin extends CI_Controller {
             header('Location: /admin');
         } else {
             $data = array();
+            
+            $selected_status = 0;
+            if(isset($GLOBALS['params'][0]))
+            {
+                $selected_status = $GLOBALS['params'][0];
+            }
+            $data['status_list'] = $this->BuildAppointmentStatus($selected_status);
+            
             $data['list'] = '';
-            $stmt = $this->model->GetAppointments();
+            $stmt = $this->model->GetAppointments($selected_status);
             foreach ($stmt->result() as $row)
             {
                 $row->app_date = date("M d o", strtotime($row->app_date));
@@ -737,6 +745,23 @@ class Admin extends CI_Controller {
             $this->load->view('Appointments',$data);
             $this->load->view('Footer');
         }
+    }
+    
+    public function BuildAppointmentStatus($selected = 0)
+    {
+        $options = '<option value="">All Status</option>';
+        foreach($this->app_status_caption as $key => $caption)
+        {
+            if($key == $selected)
+            {
+                $options .= '<option value="'.$key.'" selected>'.$caption.'</option>';
+            }
+            else
+            {
+                $options .= '<option value="'.$key.'">'.$caption.'</option>';
+            }
+        }
+        return $options;
     }
     
     public function viewAppointment()

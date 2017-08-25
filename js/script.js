@@ -985,4 +985,9 @@ $(document).ready(function ()
         window.location.href = '/admin/orders/'+id;
     });
     
+    $("#appointmentStatusSelector").change(function(){
+        var id = $(this).val();
+        window.location.href = '/admin/appointments/'+id;
+    });
+    
 });

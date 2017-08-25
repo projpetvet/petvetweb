@@ -1,7 +1,12 @@
 <div class="col-xs-10">
     <div class="container">
         <div class="main-container col-xs-12">
-            <h1>Appointments</h1>
+            <h1 class="left-header">Appointments</h1>
+            <div class="pull-right">
+                <select id="appointmentStatusSelector" class="form-control">
+                    <?php echo $status_list; ?>
+                </select>
+            </div>
             <table class="table table-striped">
                 <thead>
                     <tr class="tb-header">
