@@ -980,4 +980,9 @@ $(document).ready(function ()
         }
     });
     
+    $("#orderStatusSelector").change(function(){
+        var id = $(this).val();
+        window.location.href = '/admin/orders/'+id;
+    });
+    
 });

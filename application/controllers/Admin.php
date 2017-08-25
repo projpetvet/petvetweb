@@ -583,7 +583,15 @@ class Admin extends CI_Controller {
         } else {
             $data = array();
             $data['list'] = '';
-            $stmt = $this->model->GetOrders();
+            
+            $selected_status = 0;
+            if(isset($GLOBALS['params'][0]))
+            {
+                $selected_status = $GLOBALS['params'][0];
+            }
+            $data['status_list'] = $this->BuildOrderStatus($selected_status);
+            
+            $stmt = $this->model->GetOrders($selected_status);
             foreach ($stmt->result() as $row)
             {
                 $row->date_added = date("M d o", strtotime($row->date_added));
@@ -595,6 +603,23 @@ class Admin extends CI_Controller {
             $this->load->view('Orders',$data);
             $this->load->view('Footer');
         }
+    }
+    
+    public function BuildOrderStatus($selected = 0)
+    {
+        $options = '<option value="">All Status</option>';
+        foreach($this->status_caption as $key => $caption)
+        {
+            if($key == $selected)
+            {
+                $options .= '<option value="'.$key.'" selected>'.$caption.'</option>';
+            }
+            else
+            {
+                $options .= '<option value="'.$key.'">'.$caption.'</option>';
+            }
+        }
+        return $options;
     }
     
     public function viewOrder()

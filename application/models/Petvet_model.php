@@ -258,12 +258,20 @@ class Petvet_model extends CI_Model {
         return $selectProductDetails->result();
     }
     
-    public function GetOrders()
+    public function GetOrders($selected_status = 0)
     {
         try
         {
-            $sql = "SELECT * FROM orders ORDER BY id DESC";
-            $stmt = $this->pdo->query($sql);
+            if($selected_status == 0)
+            {
+                $sql = "SELECT * FROM orders ORDER BY id DESC";
+                $stmt = $this->pdo->query($sql);
+            }
+            else
+            {
+                $sql = "SELECT * FROM orders WHERE status = ? ORDER BY id DESC";
+                $stmt = $this->pdo->query($sql,array($selected_status));
+            }
             return $stmt;
         } 
         catch (Exception $ex) 
