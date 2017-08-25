@@ -641,7 +641,7 @@ class Petvet_model extends CI_Model {
     {
         try
         {
-            $sql = "DELETE FROM specie WHERE id = ?";
+            $sql = "DELETE FROM breed WHERE id = ?";
             $stmt = $this->pdo->query($sql,array($id));
             return $stmt;
         } 

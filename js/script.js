@@ -947,4 +947,37 @@ $(document).ready(function ()
         
         return false; 
     });
+    
+    $(".delete_breed").click(function(){
+        var id = $(this).attr('data-id');
+        var is_delete = confirm("Are you sure you want to delete this breed?");
+        if(is_delete)
+        {
+            $.ajax({
+                url : "/admin/deleteBreed",
+                method : "POST",
+                data : {
+                    id : id
+                },
+                dataType : "json",
+                success : function(data)
+                {
+                    if(data.success)
+                    {
+                        alert("Breed successfully deleted.");
+                        window.location.reload();
+                    }
+                    else
+                    {
+                        alert("Error connecting to server.");
+                    }
+                },
+                error : function()
+                {
+                    alert("Error connecting to server.");
+                }
+            });
+        }
+    });
+    
 });
