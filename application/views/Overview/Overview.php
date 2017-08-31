@@ -87,8 +87,28 @@
                         RenderReportByYear();
                     }
                 });
+                
+                $("#print-report").click(function(){
+                    printDiv();
+                });
         });
         
+            function printDiv() 
+            {
+
+              var divToPrint=document.getElementById('chart_div');
+
+              var newWin=window.open('','Print-Window');
+
+              newWin.document.open();
+
+              newWin.document.write('<html><body onload="window.print()">'+divToPrint.innerHTML+'</body></html>');
+
+              newWin.document.close();
+
+              setTimeout(function(){newWin.close();},10);
+
+            }
             
             var RenderReportByMonth = function()
             {
@@ -175,7 +195,10 @@
     <div class="col-xs-10">
         <div class="container">
             <div class="main-container col-xs-12">
-                <div id="chart_div">
+                <div class="pull-right">
+                    <img id="print-report" src="/images/print.svg" style=" width: 30px;cursor: pointer;">
+                </div>
+                <div id="chart_div" class="printarea">
                     <img id="chart-loader" src="/images/oval.svg">
                 </div>
             </div>
