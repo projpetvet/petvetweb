@@ -693,5 +693,85 @@ class Petvet_model extends CI_Model {
             exit;
         }
     }
+    
+    public function GetAppointmentYears() {
+        try
+        {
+            $sql = "SELECT DISTINCT(YEAR(app_date)) as years 
+                    FROM appointment 
+                    WHERE status = 4 
+                    ORDER BY years DESC";
+            $stmt = $this->pdo->query($sql);
+            return $stmt;
+        } 
+        catch (Exception $ex) 
+        {
+            echo $ex;
+            exit;
+        }
+    }
+    
+    public function GetOrderYears() {
+        try
+        {
+            $sql = "SELECT DISTINCT(YEAR(date_added)) as years 
+                    FROM orders 
+                    WHERE status = 4 
+                    ORDER BY years DESC";
+            $stmt = $this->pdo->query($sql);
+            return $stmt;
+        } 
+        catch (Exception $ex) 
+        {
+            echo $ex;
+            exit;
+        }
+    }
+    
+    public function GetOrderTotalByDateRange($date_from,$date_to) {
+        try
+        {
+            $sql = "SELECT SUM(total) as total 
+                    FROM orders
+                    WHERE date_added >= ? AND date_added <= ?";
+            $stmt = $this->pdo->query($sql,array($date_from,$date_to));
+            if($stmt->result()[0]->total)
+            {
+                return $stmt->result()[0]->total;
+            }
+            else
+            {
+                return 0;
+            }
+        } 
+        catch (Exception $ex) 
+        {
+            echo $ex;
+            exit;
+        }
+    }
+    
+    public function GetAppointmentTotalByDateRange($date_from,$date_to) {
+        try
+        {
+            $sql = "SELECT SUM(total) as total 
+                    FROM appointment
+                    WHERE app_date >= ? AND app_date <= ?";
+            $stmt = $this->pdo->query($sql,array($date_from,$date_to));
+            if($stmt->result()[0]->total)
+            {
+                return $stmt->result()[0]->total;
+            }
+            else
+            {
+                return 0;
+            }
+        } 
+        catch (Exception $ex) 
+        {
+            echo $ex;
+            exit;
+        }
+    }
 }
 ?>

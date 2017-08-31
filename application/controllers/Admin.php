@@ -1038,6 +1038,140 @@ class Admin extends CI_Controller {
         }
         return $options;
     }
+    
+    public function Overview()
+    {
+        if ($this->session->uname == NULL) {
+            header('Location: /admin');
+        } else {
+            $data = array();
+            $data['current_month'] = date('m');
+            $data['years'] = $this->BuildYears();
+            $this->load->view('Header');
+            $this->load->view('Overview/Overview',$data);
+            $this->load->view('Footer');
+        }
+    }
+    
+    public function BuildYears()
+    {
+        $options = '<option value="">Select Year</option>';
+        $current_year = date('Y');
+        $years_app = $this->model->GetAppointmentYears();
+        $years_order = $this->model->GetOrderYears();
+        
+        $all_years = array();
+        foreach ($years_app->result() as $y)
+        {
+            if(!in_array($y->years,$all_years))
+            {
+                array_push($all_years, $y->years);
+            }
+        }
+        
+        foreach ($years_order->result() as $y)
+        {
+            if(!in_array($y->years,$all_years))
+            {
+                array_push($all_years, $y->years);
+            }
+        }
+        
+        rsort($all_years);
+        
+        foreach ($all_years as $y)
+        {
+            if($current_year == $y)
+            {
+                $options .= '<option value="'.$y.'" selected>'.$y.'</option>';
+            }
+            else
+            {
+                $options .= '<option value="'.$y.'">'.$y.'</option>';
+            }
+        }
+        return $options;
+    }
+    
+    public function GetReportByMonth()
+    {
+        $json_data = array();
+        $date_from = date('Y-m-d',strtotime($_POST['year'].'-'.$_POST['month'].'-1'));
+        $date_to = date("Y-m-t", strtotime($date_from));
+        
+        $json_data['title'] = "Monthly Report";
+        $json_data['subTitle'] = "From: ".date('m/d/Y',strtotime($date_from))." To: ".date('m/d/Y',strtotime($date_to));
+        
+        $json_data['columns'] = array();
+        $json_data['columns'][0] = array('string', 'Weeks');
+        $json_data['columns'][1] = array('number', 'Sales');
+        $json_data['columns'][2] = array('number', 'Appointments');
+        
+        $json_data['content'] = array();
+        
+        $start_date = $date_from;
+        $end_date = $date_to;
+        $week_counter = 1;
+        for($date = $start_date; $date <= $end_date; $date = date('Y-m-d', strtotime($date. ' + 7 days')))
+        {
+            $week_data = $this->getWeekDates($date, $start_date, $end_date);
+            $week_content = array();
+            $week_content[0] = "Week ".$week_counter;
+            $week_content[1] = floatval($this->model->GetOrderTotalByDateRange($week_data['from'],$week_data['to']));
+            $week_content[2] = floatval($this->model->GetAppointmentTotalByDateRange($week_data['from'],$week_data['to']));
+            $week_counter++;
+            array_push($json_data['content'], $week_content);
+        }
+        
+        $json_data['success'] = TRUE;
+        echo json_encode($json_data);
+        exit;
+    }
+
+    public function getWeekDates($date, $start_date, $end_date)
+    {
+        $week =  date('W', strtotime($date));
+        $year =  date('Y', strtotime($date));
+        $from = date("Y-m-d", strtotime("{$year}-W{$week}")); //Returns the date of monday in week
+            if($from < $start_date) $from = $start_date;
+        $to = date("Y-m-d", strtotime("{$year}-W{$week}-7"));   //Returns the date of sunday in week
+            if($to > $end_date) $to = $end_date;
+        
+        $week_data = array();
+        $week_data['from'] = $from;
+        $week_data['to'] = $to;
+        return $week_data;
+    }
+    
+    public function GetReportByYear()
+    {
+        $date_from = date('Y-m-d',strtotime($_POST['year'].'-01-1'));
+        $date_to = date('Y-m-d',strtotime($_POST['year'].'-12-31'));
+        $json_data = array();
+        $content = $this->model->GetCrimeAnalysisByDateRange($date_from,$date_to);
+        $json_data['content'] = $content->result();
+        $json_data['success'] = TRUE;
+        echo json_encode($json_data);
+        exit;
+    }
+    
+    public function GetReportByWeek()
+    {
+        $week_data = explode('-', $_POST['week']);
+        $year = $week_data[0];
+        $week = $week_data[1];
+        $week = ltrim($week, 'W');
+
+        $date_from = date('Y-m-d', strtotime($year."W".str_pad($week,2,"0",STR_PAD_LEFT)));
+        $date_to =  date('Y-m-d', strtotime("+6 days", strtotime($date_from)));
+        
+        $json_data = array();
+        $content = $this->model->GetCrimeAnalysisByDateRange($date_from,$date_to);
+        $json_data['content'] = $content->result();
+        $json_data['success'] = TRUE;
+        echo json_encode($json_data);
+        exit;
+    }
 }
 
 ?>

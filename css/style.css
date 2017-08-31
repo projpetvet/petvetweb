@@ -234,3 +234,35 @@ body
 {
     cursor: pointer;
 }
+
+#chart-loader
+{
+    width: 50px;
+    margin: 40vh auto;
+    display: block;
+}
+
+#sort-icon
+{
+    width: 60px;
+    position: fixed;
+    right: 25px;
+    bottom: 25px;
+}
+
+#sort-icon:hover
+{
+    cursor: pointer;
+}
+
+#show_results
+{
+    margin-top: 5px;
+    background: #0c827f;
+    color: #fff;
+}
+
+.report-inputs input, .report-inputs select
+{
+    margin-bottom: 5px;
+}

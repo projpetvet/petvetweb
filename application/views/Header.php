@@ -4,7 +4,6 @@
         <meta charset = "utf-8"> 
         <title>PetVet</title> 
         <link rel = "stylesheet" type = "text/css" href = "<?php echo base_url(); ?>css/bootstrap.min.css">
-        <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
         <link rel = "stylesheet" type = "text/css" href = "<?php echo base_url(); ?>css/style.css">
         <link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet">
         
@@ -29,7 +28,7 @@
                 </div>
                 <div class="collapse navbar-collapse" id="myNavbar">
                     <ul class="nav navbar-nav navbar-right">
-                        <li><a id="btnLogOut" href="/admin"><i class="fa fa-sign-out" aria-hidden="true"></i> Logout</a></li>
+                        <li><a id="btnLogOut" href="/admin"><img src="/images/logout.svg" style="width: 18px;"> Logout</a></li>
                     </ul>
                 </div>
             </div>
@@ -37,6 +36,9 @@
         <div class="left-nav col-xs-2">
             <div class="left-nav-wrapper">
                 <ul class="list-group">
+                    <a href="/admin/overview">
+                        <li class="list-group-item">Overview </li>
+                    </a>
                     <a href="/admin/orders">
                         <li class="list-group-item">Orders </li>
                     </a>
