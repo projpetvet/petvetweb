@@ -4,7 +4,6 @@
         google.charts.setOnLoadCallback(drawChart);
 
         function drawChart() {
-            RenderReportByMonth();
         }
 	
 	function dynamicLoad(content)
@@ -46,6 +45,7 @@
             $(".month-holder").fadeIn();
             $(".year-holder").fadeIn();
             $("#month_selector").val(current_month);
+            RenderReportByMonth();
             //sorting
                 $("#sort_selector").change(function(){
                     var sorter = $(this).val();
