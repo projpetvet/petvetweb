@@ -733,7 +733,8 @@ class Petvet_model extends CI_Model {
         {
             $sql = "SELECT SUM(total) as total 
                     FROM orders
-                    WHERE date_added >= ? AND date_added <= ?";
+                    WHERE date_added >= ? AND date_added <= ?
+                    AND status != 5";
             $stmt = $this->pdo->query($sql,array($date_from,$date_to));
             if($stmt->result()[0]->total)
             {
@@ -756,8 +757,57 @@ class Petvet_model extends CI_Model {
         {
             $sql = "SELECT SUM(total) as total 
                     FROM appointment
-                    WHERE app_date >= ? AND app_date <= ?";
+                    WHERE app_date >= ? AND app_date <= ?
+                    AND status != 5";
             $stmt = $this->pdo->query($sql,array($date_from,$date_to));
+            if($stmt->result()[0]->total)
+            {
+                return $stmt->result()[0]->total;
+            }
+            else
+            {
+                return 0;
+            }
+        } 
+        catch (Exception $ex) 
+        {
+            echo $ex;
+            exit;
+        }
+    }
+    
+    public function GetOrderTotalByDay($date_day) {
+        try
+        {
+            $sql = "SELECT SUM(total) as total
+                    FROM orders
+                    WHERE DATE(date_added) = ?
+                    AND status != 5";
+            $stmt = $this->pdo->query($sql,array($date_day));
+            if($stmt->result()[0]->total)
+            {
+                return $stmt->result()[0]->total;
+            }
+            else
+            {
+                return 0;
+            }
+        } 
+        catch (Exception $ex) 
+        {
+            echo $ex;
+            exit;
+        }
+    }
+    
+    public function GetAppointmentTotalByDay($date_day) {
+        try
+        {
+            $sql = "SELECT SUM(total) as total 
+                    FROM appointment
+                    WHERE app_date = ?
+                    AND status != 5";
+            $stmt = $this->pdo->query($sql,array($date_day));
             if($stmt->result()[0]->total)
             {
                 return $stmt->result()[0]->total;

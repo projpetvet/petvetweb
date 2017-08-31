@@ -159,41 +159,7 @@
                     success : function(data){
                         if(data.success)
                         {
-                            var valid_pie = false;
-                            $.each(data.content,function(key,value){
-                                var int_value = parseInt(value['value']);
-                                data.content[key]['value'] = int_value;
-                                if(int_value > 0)
-                                {
-                                    valid_pie = true;
-                                }
-                            });
-
-                            if(valid_pie)
-                            {
-                                $("#tabular-view").fadeIn();
-                                $(".no-data-found").css("display","none");
-                                $("#myPie").fadeIn();
-                                if(pie == null)
-                                {
-                                    window.pie = new d3pie("myPie", {
-                                            header: {
-                                            },
-                                            data: {
-                                                    content: data.content
-                                            }
-                                    });
-                                }
-                                else
-                                {
-                                    pie.updateProp("data.content", data.content);
-                                }
-                            }
-                            else
-                            {
-                               $(".no-data-found").css("display","block");
-                               $("#myPie").fadeOut();
-                            }
+                            dynamicLoad(data);
                         }
                         else
                         {

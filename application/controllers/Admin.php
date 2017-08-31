@@ -1199,8 +1199,31 @@ class Admin extends CI_Controller {
         $date_to =  date('Y-m-d', strtotime("+6 days", strtotime($date_from)));
         
         $json_data = array();
-        $content = $this->model->GetCrimeAnalysisByDateRange($date_from,$date_to);
-        $json_data['content'] = $content->result();
+        
+        $json_data['title'] = "Weekly Report";
+        $json_data['subTitle'] = 'From: '.date('m/d/Y', strtotime($date_from)).' To: '.date('m/d/Y', strtotime($date_to));
+        
+        $json_data['columns'] = array();
+        $json_data['columns'][0] = array('string', 'Days');
+        $json_data['columns'][1] = array('number', 'Sales');
+        $json_data['columns'][2] = array('number', 'Appointments');
+        
+        $json_data['content'] = array();
+        
+        $begin = new DateTime( $date_from );
+        $end   = new DateTime( $date_to );
+
+        for($i = $begin; $i <= $end; $i->modify('+1 day')){
+            $day = $i->format("Y-m-d");
+            $date_from = date('Y-m-d', strtotime($day));
+            $date_to = $date_from;
+            $content = array();
+            $content[0] = date('m/d/Y', strtotime($date_from));
+            $content[1] = floatval($this->model->GetOrderTotalByDay($date_from,$date_to));
+            $content[2] = floatval($this->model->GetAppointmentTotalByDay($date_from,$date_to));
+            array_push($json_data['content'], $content);
+        }
+        
         $json_data['success'] = TRUE;
         echo json_encode($json_data);
         exit;
