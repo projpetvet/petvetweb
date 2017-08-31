@@ -733,7 +733,7 @@ class Petvet_model extends CI_Model {
         {
             $sql = "SELECT SUM(total) as total 
                     FROM orders
-                    WHERE date_added >= ? AND date_added <= ?
+                    WHERE DATE(date_added) >= ? AND DATE(date_added) <= ?
                     AND status != 5";
             $stmt = $this->pdo->query($sql,array($date_from,$date_to));
             if($stmt->result()[0]->total)
