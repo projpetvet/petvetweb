@@ -1,0 +1,1 @@
+CREATE TABLE `vet`.`sms` ( `id` INT NOT NULL AUTO_INCREMENT , `recepient` VARCHAR(15) NOT NULL , `message` VARCHAR(225) NOT NULL , `is_sent` TINYINT(1) NOT NULL DEFAULT '0' , PRIMARY KEY (`id`)) ENGINE = InnoDB;
