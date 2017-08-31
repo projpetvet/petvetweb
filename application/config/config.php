@@ -1,6 +1,28 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-define('IS_DEV', FALSE);
+
+if(isset($_SERVER['SERVER_NAME']))
+{
+    // For URL access
+    $domain = explode(".", $_SERVER['SERVER_NAME']);
+    if(in_array('dev', $domain))
+    {
+        define('IS_DEV', TRUE);
+    }
+    elseif(in_array('000webhostapp', $domain))
+    {
+        define('IS_DEV', FALSE);
+    }
+    else
+    {
+        define('IS_DEV', TRUE);
+    }
+
+}
+else 
+{
+    define('IS_DEV', TRUE);
+}
 /*
 |--------------------------------------------------------------------------
 | Base Site URL
