@@ -16,6 +16,21 @@ class Admin extends CI_Controller {
         5  => "Canceled"
     );
     
+    private $months = array(
+        1  => "Jan",
+        2  => "Feb",
+        3  => "Mar",
+        4  => "Apr",
+        5  => "May",
+        6  => "Jun",
+        7  => "Jul",
+        8  => "Aug",
+        9  => "Sept",
+        10  => "Oct",
+        11  => "Nov",
+        12  => "Dec",
+    );
+    
     function __construct() {
         parent::__construct();
         $this->load->library('session');
@@ -1145,11 +1160,29 @@ class Admin extends CI_Controller {
     
     public function GetReportByYear()
     {
-        $date_from = date('Y-m-d',strtotime($_POST['year'].'-01-1'));
-        $date_to = date('Y-m-d',strtotime($_POST['year'].'-12-31'));
         $json_data = array();
-        $content = $this->model->GetCrimeAnalysisByDateRange($date_from,$date_to);
-        $json_data['content'] = $content->result();
+        
+        $json_data['title'] = "Yearly Report (".$_POST['year'].')';
+        $json_data['subTitle'] = "From: January ".$_POST['year']." To: December ".$_POST['year'];
+        
+        $json_data['columns'] = array();
+        $json_data['columns'][0] = array('string', 'Months');
+        $json_data['columns'][1] = array('number', 'Sales');
+        $json_data['columns'][2] = array('number', 'Appointments');
+        
+        $json_data['content'] = array();
+        
+        foreach ($this->months as $key => $m)
+        {
+            $date_from = date('Y-m-d',strtotime($_POST['year'].'-'.$key.'-1'));
+            $date_to = date("Y-m-t", strtotime($date_from));
+            $content = array();
+            $content[0] = $m;
+            $content[1] = floatval($this->model->GetOrderTotalByDateRange($date_from,$date_to));
+            $content[2] = floatval($this->model->GetAppointmentTotalByDateRange($date_from,$date_to));
+            array_push($json_data['content'], $content);
+        }
+        
         $json_data['success'] = TRUE;
         echo json_encode($json_data);
         exit;
