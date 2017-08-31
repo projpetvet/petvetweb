@@ -262,6 +262,22 @@ Class WebserviceModel extends CI_Model {
         }
     }
     
+    public function GetServiceById($id)
+    {
+        try
+        {
+            $sql = "SELECT * FROM service 
+                    WHERE id = ?";
+            $stmt = $this->pdo->query($sql,array($id));
+            return $stmt->result()[0];
+        } 
+        catch (Exception $ex) 
+        {
+            echo $ex;
+            exit;
+        }
+    }
+    
     public function GetPetsByOwner($id)
     {
         try
@@ -457,6 +473,24 @@ Class WebserviceModel extends CI_Model {
                     sex = ?
                     ";
             $stmt = $this->pdo->query($sql,array($customer,$name,$breed,$specie,$gender));
+            return $stmt;
+        } 
+        catch (Exception $ex) 
+        {
+            echo $ex;
+            exit;
+        }
+    }
+    
+    public function SetAppointmentTotal($id,$total)
+    {
+        try
+        {
+            $sql = "UPDATE appointment
+                    SET total = ?
+                    WHERE id = ?
+                    ";
+            $stmt = $this->pdo->query($sql,array($total,$id));
             return $stmt;
         } 
         catch (Exception $ex) 

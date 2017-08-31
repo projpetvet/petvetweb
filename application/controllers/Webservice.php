@@ -245,10 +245,14 @@ class Webservice extends CI_Controller {
         if($id > 0)
         {
             $services = explode(',', $_POST['selected_services']);
+            $total = 0;
             foreach($services as $service_id)
             {
                 $this->model->RequestAppointmentService($id,$service_id);
+                $service_detail = $this->model->GetServiceById($service_id);
+                $total += floatval($service_detail->price);
             }
+            $this->model->SetAppointmentTotal($id,$total);
             $json_data['success'] = TRUE;
         }
         else
