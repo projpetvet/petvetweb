@@ -297,6 +297,40 @@ class Petvet_model extends CI_Model {
         }
     }
     
+    public function GetOrderCustomerById($id)
+    {
+        try
+        {
+            $sql = "SELECT customer_id FROM orders
+                    WHERE id = ?";
+            $stmt = $this->pdo->query($sql,array($id));
+            $result = $stmt->result()[0];
+            return $result->customer_id;
+        } 
+        catch (Exception $ex) 
+        {
+            echo $ex;
+            exit;
+        }
+    }
+    
+    public function GetAppointmentCustomerById($id)
+    {
+        try
+        {
+            $sql = "SELECT customer_id FROM appointment
+                    WHERE id = ?";
+            $stmt = $this->pdo->query($sql,array($id));
+            $result = $stmt->result()[0];
+            return $result->customer_id;
+        } 
+        catch (Exception $ex) 
+        {
+            echo $ex;
+            exit;
+        }
+    }
+    
     public function GetOrderLineByOrderId($id)
     {
         try
@@ -816,6 +850,24 @@ class Petvet_model extends CI_Model {
             {
                 return 0;
             }
+        } 
+        catch (Exception $ex) 
+        {
+            echo $ex;
+            exit;
+        }
+    }
+    
+    public function GetCustomerById($id) 
+    {
+        try
+        {
+            $sql = "SELECT * FROM customer
+                    WHERE id = ?
+                    ";
+            $stmt = $this->pdo->query($sql,$id);
+            $result = $stmt->result();
+            return (array) $result[0];
         } 
         catch (Exception $ex) 
         {

@@ -37,6 +37,7 @@ class Admin extends CI_Controller {
         $data = array();
         $this->load->helper('url');
         $this->load->model('Petvet_model','model');
+        $this->load->model('SmsModel','sms');
         $this->load->helper('form');
 
         $path = explode("/", $_SERVER['PATH_INFO']);
@@ -720,6 +721,13 @@ class Admin extends CI_Controller {
             }
         }
         
+        $customer_id = $this->model->GetOrderCustomerById($_POST['order_id']);
+        $customer_info = $this->model->GetCustomerById($customer_id);
+        $sms_data = array();
+        $sms_data['recepient'] = $customer_info['mobile'];
+        $sms_data['message'] = 'Hi '.$customer_info['firstname'].', your order with ID #'.$_POST['order_id'].' is now '.$this->status_caption[$_POST['status']].'.';
+        $this->sms->InsertMessage($sms_data);
+        
         echo json_encode($json_data);
         exit;
     }
@@ -728,6 +736,14 @@ class Admin extends CI_Controller {
     {
         $json_data = array();
         $json_data['success'] = $this->model->ChangeAppointmentStatus($_POST['app_id'],$_POST['status']);
+        
+        $customer_id = $this->model->GetAppointmentCustomerById($_POST['app_id']);
+        $customer_info = $this->model->GetCustomerById($customer_id);
+        $sms_data = array();
+        $sms_data['recepient'] = $customer_info['mobile'];
+        $sms_data['message'] = 'Hi '.$customer_info['firstname'].', your appointment with ID #'.$_POST['app_id'].' is now '.$this->app_status_caption[$_POST['status']].'.';
+        $this->sms->InsertMessage($sms_data);
+        
         echo json_encode($json_data);
         exit;
     }
