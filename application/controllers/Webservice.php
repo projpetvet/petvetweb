@@ -372,4 +372,38 @@ class Webservice extends CI_Controller {
         echo json_encode($json_data);
         exit;
     }
+    
+    public function GetMessages()
+    {
+        $json_data = array();
+        $result = $this->model->GetMessages();
+        if(!empty($result->result()))
+        {
+            $json_data['contact'] = $result->result();
+        }
+        else
+        {
+            $json_data['contact'] = array();
+        }
+        echo json_encode($json_data);
+        exit;
+    }
+    
+    public function SetMessagesSent()
+    {
+        $json_data = array();
+        if(isset($_GET['ids']))
+        {
+            $ids = explode(',', $_GET['ids']);
+            foreach ($ids as $id)
+            {
+                if(trim($id) != '')
+                {
+                    $this->model->SetMessageSent($id);
+                }
+            }
+        }
+        echo json_encode($json_data);
+        exit;
+    }
 }

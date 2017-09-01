@@ -499,6 +499,39 @@ Class WebserviceModel extends CI_Model {
             exit;
         }
     }
+    
+    public function GetMessages()
+    {
+        try
+        {
+            $sql = "SELECT * FROM sms
+                    WHERE is_sent = 0";
+            $stmt = $this->pdo->query($sql);
+            return $stmt;
+        } 
+        catch (Exception $ex) 
+        {
+            echo $ex;
+            exit;
+        }
+    }
+    
+    public function SetMessageSent($id)
+    {
+        try
+        {
+            $sql = "UPDATE sms
+                    SET is_sent = 1
+                    WHERE id = ?";
+            $stmt = $this->pdo->query($sql,array($id));
+            return $stmt;
+        } 
+        catch (Exception $ex) 
+        {
+            echo $ex;
+            exit;
+        }
+    }
 }
 
 ?> 
