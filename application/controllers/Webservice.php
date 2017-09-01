@@ -17,6 +17,7 @@ class Webservice extends CI_Controller {
         header('Access-Control-Allow-Origin: *');
         header('Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept');
         $this->load->model('WebserviceModel','model');
+        $this->load->model('SmsModel','sms');
     }
     
     public function index()
@@ -153,6 +154,12 @@ class Webservice extends CI_Controller {
             {
                 $this->model->AddOrderLine($order_id,$line);
             }
+            
+            $customer_info = $this->model->GetCustomerById($_POST['customer_id']);
+            $sms_data = array();
+            $sms_data['recepient'] = $customer_info['mobile'];
+            $sms_data['message'] = 'Hi '.$customer_info['firstname'].', thank you for the order you made with ID #'.$order_id.'. This is a confirmation that your order has been successfully received.';
+            $this->sms->InsertMessage($sms_data);
             $json_data['success'] = TRUE;
         }
         else
@@ -253,6 +260,13 @@ class Webservice extends CI_Controller {
                 $total += floatval($service_detail->price);
             }
             $this->model->SetAppointmentTotal($id,$total);
+            
+            $customer_info = $this->model->GetCustomerById($_POST['customer_id']);
+            $sms_data = array();
+            $sms_data['recepient'] = $customer_info['mobile'];
+            $sms_data['message'] = 'Hi '.$customer_info['firstname'].', thank you for the appointment you made with ID #'.$id.'. This is a confirmation that your appointment request has been successfully received.';
+            $this->sms->InsertMessage($sms_data);
+            
             $json_data['success'] = TRUE;
         }
         else
