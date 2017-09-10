@@ -40,6 +40,21 @@ Class WebserviceModel extends CI_Model {
         }
     }
     
+    public function AuthenticateWebUser($web_code) 
+    {
+        try
+        {
+            $sql = "SELECT id FROM customer where web_code = ?";
+            $stmt = $this->pdo->query($sql,array($web_code));
+            return $stmt->result();
+        } 
+        catch (Exception $ex) 
+        {
+            echo $ex;
+            exit;
+        }
+    }
+    
     public function Register($data)
     {
         try
@@ -524,6 +539,57 @@ Class WebserviceModel extends CI_Model {
                     SET is_sent = 1
                     WHERE id = ?";
             $stmt = $this->pdo->query($sql,array($id));
+            return $stmt;
+        } 
+        catch (Exception $ex) 
+        {
+            echo $ex;
+            exit;
+        }
+    }
+    
+    public function CheckIfWebUserExist($webkey)
+    {
+        try
+        {
+            $sql = "SELECT id FROM customer
+                    WHERE web_key = ?";
+            $stmt = $this->pdo->query($sql,array($webkey));
+            return $stmt->result();
+        } 
+        catch (Exception $ex) 
+        {
+            echo $ex;
+            exit;
+        }
+    }
+    
+    public function RegisterWebUser($data)
+    {
+        try
+        {
+            extract($data);
+            $sql = "INSERT INTO customer
+                    SET lastname = ?,
+                    web_key = ?";
+            $stmt = $this->pdo->query($sql,array($name,$web_key));
+            return $stmt;
+        } 
+        catch (Exception $ex) 
+        {
+            echo $ex;
+            exit;
+        }
+    }
+    
+    public function SetVerificationKey($webkey,$web_code)
+    {
+        try
+        {
+            $sql = "UPDATE customer
+                    SET web_code = ?
+                    WHERE web_key = ?";
+            $stmt = $this->pdo->query($sql,array($web_code,$webkey));
             return $stmt;
         } 
         catch (Exception $ex) 

@@ -55,6 +55,25 @@ class Webservice extends CI_Controller {
         exit;
     }
     
+    public function SignInWebUser()
+    {
+        $json_data = array();
+        $stmt = $this->model->AuthenticateWebUser($_POST['web_code']);
+        if(count($stmt) > 0)
+        {
+            $json_data['success'] = TRUE;
+            $json_data['id'] = $stmt[0]->id;
+        }
+        else
+        {
+            $json_data['success'] = FALSE;
+            $json_data['message'] = 'Login failed';
+        }
+
+        echo json_encode($json_data);
+        exit;
+    }
+    
     public function Register()
     {
         $json_data = array();
@@ -405,5 +424,38 @@ class Webservice extends CI_Controller {
         }
         echo json_encode($json_data);
         exit;
+    }
+    
+    public function RegisterWebUser()
+    {
+        $web_key = $_GET['web_key'];
+        $is_registered = $this->model->CheckIfWebUserExist($web_key);
+        if(empty($is_registered))
+        {
+            $this->model->RegisterWebUser($_GET);
+            $this->SetVerificationCode($web_key);
+        }
+        else
+        {
+            $this->SetVerificationCode($web_key);
+        }
+    }
+    
+    public function SetVerificationCode($web_key)
+    {
+        $web_code = $this->generateRandomString();
+        $this->model->SetVerificationKey($web_key,$web_code);
+        $this->load->view('Signin/Success',array("web_code" => $web_code));
+    }
+    
+    public function generateRandomString($length = 5) 
+    {
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $charactersLength = strlen($characters);
+        $randomString = '';
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $characters[rand(0, $charactersLength - 1)];
+        }
+        return $randomString;
     }
 }

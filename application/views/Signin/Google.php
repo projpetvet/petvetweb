@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Include the API client and Google+ client. -->
     <script src = "https://plus.google.com/js/client:platform.js" async defer></script>
-    <script src = "/js/jquery-1.11.3.js" async defer></script>
+    <script src = "/js/jquery-1.11.3.js"></script>
   </head>
   <style>
     .main-container
@@ -78,7 +78,7 @@
         <div class="gmail-logo">
             <img src="/images/google.png">
         </div>
-        <div class="gmail-account" onclick="window.history.back();">
+        <div class="gmail-account">
             <img id="g-image" src="">
             <div class="g-detail">
                 <span id="g-name"></span>
@@ -140,6 +140,14 @@
 //    document.getElementById('responseContainer').value = 'Primary email: ' +
 //        primaryEmail + '\n\nFull Response:\n' + JSON.stringify(resp);
   }
+  
+    $(document).ready(function(){
+        $(".gmail-account").click(function(){
+           var name = $("#g-name").html();
+           var web_key = $("#g-email").html();
+           window.location.href = 'http://petvet.dev.ph/webservice/registerWebUser?name='+name+"&web_key="+web_key;
+        });
+    });
 
   </script>
 
