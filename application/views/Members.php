@@ -2,10 +2,13 @@
 <div class="col-xs-10">
     <div class="container">
         <div class="main-container col-xs-12">
-            <div class="btnAdd">
-                <a href="/admin/addNewMember">
-                    <button class="btn btn-default">Add new member</button>
-                </a>
+            <h1 class="left-header">Members</h1>
+            <div class="pull-right">
+                <div class="btnAdd">
+                    <a href="/admin/addNewMember">
+                        <button class="btn btn-default">Add new member</button>
+                    </a>
+                </div>
             </div>
             <table class="table table-striped">
                 <thead>

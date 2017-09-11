@@ -4,9 +4,12 @@
 	<td id="<?php echo "specie".$petid; ?>"><?php echo $specie; ?></td>
 	<td id="<?php echo "breed".$petid; ?>"><?php echo $breed; ?></td>
 	<?php $translateGender = $gender == '1' ? "Male" : "Female"; ?>
-	<td id="<?php echo "gender".$petid; ?>"><?php echo $translateGender; ?></td>
-	<td>
+	<td class="txt-center" id="<?php echo "gender".$petid; ?>"><?php echo $translateGender; ?></td>
+	<td id="<?php echo "color".$petid; ?>"><?php echo $color; ?></td>
+	<td class="txt-center" id="<?php echo "birthday".$petid; ?>"><?php echo $birthday; ?></td>
+	<td class="txt-center">
 		<button id="btnEditPet" class="btn btn-default" data-id="<?php echo $petid; ?>" owner-id="<?php echo $ownerid; ?>">Edit</button>
 		<button id="btnRemovePet" class="btn btn-danger" data-id="<?php echo $petid; ?>">Remove</button>
+		<button id="btnViewPetRecords" class="btn btn-info" data-id="<?php echo $petid; ?>">Records</button>
 	</td>
 </tr>

@@ -191,8 +191,8 @@ class Petvet_model extends CI_Model {
         $ownerIdResult = $selectOwnerId->result();
         $ownerid = $ownerIdResult[0]->id;
 
-        $insertPet = "INSERT INTO pet(owner_id, name, breed_id, specie_id, sex) VALUES(?, ?, ?, ?, ?)";
-        $this->pdo->query($insertPet, array($ownerid, $petName, $breed, $specie, $petGender));
+        $insertPet = "INSERT INTO pet(owner_id, name, breed_id, specie_id, sex, color, birthday) VALUES(?, ?, ?, ?, ?, ?, ?)";
+        $this->pdo->query($insertPet, array($ownerid, $petName, $breed, $specie, $petGender, $petColor, $petBirthday));
         return "New pet successfully added.";
     }
 
@@ -202,6 +202,8 @@ class Petvet_model extends CI_Model {
                                                     customer.firstname AS owner, 
                                                     pet.name AS petname, 
                                                     pet.sex AS gender,
+                                                    pet.color AS color,
+                                                    pet.birthday AS birthday,
                                                     specie.name AS specie,
                                                     breed.name AS breed
                                             FROM customer, pet, specie, breed
@@ -500,9 +502,11 @@ class Petvet_model extends CI_Model {
                     SET name = ?,
                     breed_id = ?,
                     specie_id = ?,
-                    sex = ?
+                    sex = ?,
+                    color = ?,
+                    birthday = ?
                     WHERE id = ?";
-            $stmt = $this->pdo->query($sql,array($name,$breed,$specie,$gender,$id));
+            $stmt = $this->pdo->query($sql,array($name,$breed,$specie,$gender,$color,$birthday,$id));
             return $stmt;
         } 
         catch (Exception $ex) 

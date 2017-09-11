@@ -73,7 +73,7 @@
                         <li class="list-group-item">Breeds </li>
                     </a>
                     <a href="/admin/useradmin">
-                        <li class="list-group-item">User Admin </li>
+                        <li class="list-group-item">Admin Users </li>
                     </a>
                 </ul>
             </div>

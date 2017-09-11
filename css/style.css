@@ -222,7 +222,7 @@ body
 .left-header
 {
     float: left;
-    margin: 0;
+    margin: 0 0 15px;
 }
 
 .btn-space
@@ -265,4 +265,9 @@ body
 .report-inputs input, .report-inputs select
 {
     margin-bottom: 5px;
+}
+
+.txt-center
+{
+    text-align: center;
 }

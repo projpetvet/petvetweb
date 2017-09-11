@@ -495,10 +495,12 @@ $(document).ready(function ()
         var petName = $('#petName').val();
         var specie = $('#optSpecie').val();
         var breed = $('#optBreed').val();
+        var petColor = $('#petColor').val();
+        var petBirthday = $('#petBirthday').val();
         var petGender = $('#petGender').val() == "Male" ? '1' : '2';
 
         $('#saveStatus').html(" ");
-        if (petName == "" || specie == null || breed == null)
+        if (petName == "" || petBirthday == "" || petColor == "" || specie == null || breed == null)
         {
             $("#saveStatus").html('<div class="alert alert-warning">' +
                     '<strong>Please enter complete details. Try again.</strong>' +
@@ -513,7 +515,9 @@ $(document).ready(function ()
                     petName: petName,
                     specie: specie,
                     breed: breed,
-                    petGender: petGender
+                    petGender: petGender,
+                    petColor: petColor,
+                    petBirthday: petBirthday
                 },
                 dataType: "json",
                 success: function (data)
@@ -521,6 +525,13 @@ $(document).ready(function ()
                     $("#saveStatus").html('<div class="alert alert-success">' +
                             '<strong>' + data + '</strong>' +
                             '</div>');
+                    $('#optOwnerName').val('');
+                    $('#petName').val('');
+                    $('#optSpecie').val('');
+                    $('#optBreed').val('');
+                    $('#petColor').val('');
+                    $('#petBirthday').val('');
+                    $('#petGender').val('');
                 }
             });
         }
@@ -568,6 +579,8 @@ $(document).ready(function ()
         var data = {
             id : $("#editid").val(),
             name : $('#petName').val(),
+            color : $('#petColor').val(),
+            birthday : $('#petBirthday').val(),
             specie : $('#optSpecie').val(),
             breed : $('#optBreed').val(),
             gender : $('#petGender').val()
@@ -605,6 +618,8 @@ $(document).ready(function ()
             {
                 $("#editid").val(petid);
                 $('#petName').val($('#petname' + petid).html());
+                $('#petColor').val($('#color' + petid).html());
+                $('#petBirthday').val($('#birthday' + petid).html());
                 $('#optSpecie').val(data.info.specie_id);
                 var breed_id = data.info.breed_id;
                 var speciename = $('#optSpecie').val();

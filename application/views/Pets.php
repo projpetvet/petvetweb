@@ -2,10 +2,13 @@
 <div class="col-xs-10">
     <div class="container">
         <div class="main-container col-xs-12">
-            <div class="btnAdd">
-                <a href="/admin/addNewPet">
-                    <button class="btn btn-default">Add new pet</button>
-                </a>
+            <h1 class="left-header">Pets</h1>
+            <div class="pull-right">
+                <div class="btnAdd">
+                    <a href="/admin/addNewPet">
+                        <button class="btn btn-default">Add new pet</button>
+                    </a>
+                </div>
             </div>
             <table class="table table-striped">
                 <thead>
@@ -14,8 +17,10 @@
                         <th>Owner</th>
                         <th>Specie</th>
                         <th>Breed</th>
-                        <th>Gender</th>
-                        <th>Actions</th>
+                        <th class="txt-center">Gender</th>
+                        <th>Color</th>
+                        <th class="txt-center">Birthday</th>
+                        <th class="txt-center">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -65,6 +70,16 @@
                             <option value="1">Male</option>
                             <option value="2">Female</option>
                         </select>
+                    </div>
+                    <div class="col-sm-6">
+                        <br/>
+                        Color:
+                        <input type="text" id="petColor" class="form-control"/>
+                    </div>
+                    <div class="col-sm-6">
+                        <br/>
+                        Birthday:
+                        <input type="date" id="petBirthday" class="form-control"/>
                     </div>
                 </div>
             </div>
