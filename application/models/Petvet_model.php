@@ -891,6 +891,21 @@ class Petvet_model extends CI_Model {
         }
     }
     
+    public function GetServiceCategories() {
+        try 
+        {
+            $stmt = $this->pdo->query("SELECT * FROM service_category 
+                                        WHERE enabled = 1
+                                        ORDER BY name
+                                    ");
+            return $stmt;
+        }
+        catch (Exception $ex) {
+            echo $ex;
+            exit;
+        }
+    }
+    
     public function SaveProductCategory($data) {
         try 
         {
@@ -945,6 +960,72 @@ class Petvet_model extends CI_Model {
         try 
         {
             $sql = "UPDATE product_category 
+                                        SET enabled = 0
+                                        WHERE id = ?
+                                        ";
+            $stmt = $this->pdo->query($sql,array($id));
+            return $stmt;
+        }
+        catch (Exception $ex) {
+            echo $ex;
+            exit;
+        }
+    }
+    
+    public function SaveServiceCategory($data) {
+        try 
+        {
+            extract($data);
+            $sql = "INSERT INTO service_category 
+                                        SET name = ?,
+                                        description = ?
+                                        ";
+            $stmt = $this->pdo->query($sql,array($name,$description));
+            return $stmt;
+        }
+        catch (Exception $ex) {
+            echo $ex;
+            exit;
+        }
+    }
+    
+    public function GetServiceCategoryById($id) {
+        try 
+        {
+            $sql = "SELECT * FROM service_category 
+                    WHERE id = ?
+                    ";
+            $stmt = $this->pdo->query($sql,array($id));
+            return $stmt;
+        }
+        catch (Exception $ex) {
+            echo $ex;
+            exit;
+        }
+    }
+    
+    public function UpdateServiceCategory($data) {
+        try 
+        {
+            extract($data);
+            $sql = "UPDATE service_category 
+                                        SET name = ?,
+                                        description = ?
+                                        WHERE id = ?
+                                        ";
+            $stmt = $this->pdo->query($sql,array($name,$description,$id));
+            return $stmt;
+        }
+        catch (Exception $ex) {
+            echo $ex;
+            exit;
+        }
+    }
+    
+    public function RemoveServiceCategory($id) {
+        try 
+        {
+            $sql = "UPDATE service_category 
                                         SET enabled = 0
                                         WHERE id = ?
                                         ";

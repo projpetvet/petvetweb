@@ -54,6 +54,9 @@
                     <a href="/admin/services">
                         <li class="list-group-item">Services </li>
                     </a>
+                    <a href="/admin/serviceCategories">
+                        <li class="list-group-item">Service Categories </li>
+                    </a>
                     <a href="/admin/doctors">
                         <li class="list-group-item actives">Doctors </li>
                     </a>

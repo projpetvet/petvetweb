@@ -91,6 +91,17 @@ class Admin extends CI_Controller {
             $this->load->view('Footer', $data);
         }
     }
+    
+    public function ServiceCategories() {
+        if ($this->session->uname == NULL) {
+            header('Location: /admin');
+        } else {
+            $data['category_list'] = $this->GetServiceCategoriesList();
+            $this->load->view('Header', $data);
+            $this->load->view('ServiceCategories', $data);
+            $this->load->view('Footer', $data);
+        }
+    }
 
     public function getProductsList() {
         $products = '';
@@ -115,6 +126,16 @@ class Admin extends CI_Controller {
         foreach ($result->result() as $row) 
         {   
             $products .= $this->load->view('lists/productcategories', $row, true);
+        }
+        return $products;
+    }
+    
+    public function GetServiceCategoriesList() {
+        $products = '';
+        $result = $this->model->GetServiceCategories();
+        foreach ($result->result() as $row) 
+        {   
+            $products .= $this->load->view('lists/servicecategories', $row, true);
         }
         return $products;
     }
@@ -1386,7 +1407,128 @@ class Admin extends CI_Controller {
         echo json_encode($json_data);
         exit;
     }
-
+    
+    public function AddNewServiceCategory() {
+        if ($this->session->uname == NULL) {
+            header('Location: /admin');
+        } else {
+            $data = array();
+            if(isset($_SESSION['message']))
+            {
+                $data['message'] = $_SESSION['message'];
+                unset($_SESSION['message']);
+            }
+            else
+            {
+                $data['message'] = '';
+            }
+            $this->load->view('Header');
+            $this->load->view('AddNewServiceCategory',$data);
+            $this->load->view('Footer');
+        }
+    }
+    
+    public function EditServiceCategory() {
+        if ($this->session->uname == NULL) {
+            header('Location: /admin');
+        } else {
+            if(isset($GLOBALS['params'][0]))
+            {
+                $data = array();
+                $id = $GLOBALS['params'][0];
+                $stmt = $this->model->GetServiceCategoryById($id);
+                foreach($stmt->result() as $row)
+                {
+                    $data['id'] = $row->id;
+                    $data['name'] = $row->name;
+                    $data['description'] = $row->description;
+                }
+                
+                if(isset($_SESSION['message']))
+                {
+                    $data['message'] = $_SESSION['message'];
+                    unset($_SESSION['message']);
+                }
+                else
+                {
+                    $data['message'] = '';
+                }
+                $this->load->view('Header');
+                $this->load->view('EditServiceCategory',$data);
+                $this->load->view('Footer');
+            }
+            else
+            {
+                header("location : /admin/productCategories");
+            }
+        }
+    }
+    
+    public function removeServiceCategory()
+    {
+        $json_data = array();
+        if(isset($_POST['id']))
+        {
+            $json_data['success'] = $this->model->RemoveServiceCategory($_POST['id']);
+        }
+        else
+        {
+            $json_data['success'] = FALSE;
+        }
+        
+        echo json_encode($json_data);
+        exit;
+    }
+    
+    public function SaveServiceCategory()
+    {
+        if(isset($_POST['name']) && isset($_POST['description']))
+        {
+            $_POST['description'] = htmlentities($_POST['description']);
+            $ret = $this->model->SaveServiceCategory($_POST);
+            if($ret)
+            {
+                $_SESSION['message'] = $this->SuccessMessage('Service category successfully added.');
+            }
+            else
+            {
+                $_SESSION['message'] = $this->ErrorMessage('Error saving to the database.');
+            }
+        }
+        else
+        {
+            $_SESSION['message'] = $this->ErrorMessage('There are missing fields.');
+        }
+        
+        header('Location: /admin/AddNewServiceCategory');
+        
+    }
+    
+    public function updateServiceCategory()
+    {
+        if(isset($_POST['name']) && isset($_POST['description']) && isset($_POST['id']))
+        {
+            $_POST['description'] = htmlentities($_POST['description']);
+            $ret = $this->model->UpdateServiceCategory($_POST);
+            if($ret)
+            {
+                $_SESSION['message'] = $this->SuccessMessage('Service category successfully updated.');
+            }
+            else
+            {
+                $_SESSION['message'] = $this->ErrorMessage('Error saving to the database.');
+            }
+            
+            header('Location: /admin/editServiceCategory/'.$_POST['id']);
+        }
+        else
+        {
+            $_SESSION['message'] = $this->ErrorMessage('There are missing fields.');
+            header('Location: /admin/serviceCategories/');
+        }
+        
+    }
+    
     public function SuccessMessage($message)
     {
         return '<div class="alert alert-success">

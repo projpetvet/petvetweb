@@ -15,7 +15,7 @@ $(document).ready(function ()
 
     tinymce.init({
         selector: '#textareatinymce',
-        height: 300,
+        height: 200,
         theme: 'modern',
         plugins: [
             'advlist autolink lists link image charmap print preview hr anchor pagebreak',
@@ -134,6 +134,34 @@ $(document).ready(function ()
         {
             $.ajax({
                 url: "/admin/removeCategory",
+                type: "POST",
+                data: {
+                    id: id
+                },
+                dataType: "json",
+                success: function (data)
+                {
+                    if(data.success)
+                    {
+                        $(elem).parents('tr').fadeOut('slow');
+                    }
+                    else
+                    {
+                        alert("Error removing from the database.");
+                    }
+                }
+            });
+        }
+    });
+    
+    $(document).on("click", ".btnRemoveServiceCategory", function () {
+        var elem = $(this);
+        var id = $(this).attr("data-id");
+        var confirmRemove = confirm("Are you sure you want to remove this category?");
+        if (confirmRemove)
+        {
+            $.ajax({
+                url: "/admin/removeServiceCategory",
                 type: "POST",
                 data: {
                     id: id
