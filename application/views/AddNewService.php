@@ -14,6 +14,11 @@
             <div class="col-sm-6">
                 <input type="text" class="form-control" name="serviceName" id="serviceName" placeholder="Service Name" required/>
             </div>
+            <div class="col-sm-6">
+                <select class="form-control" name="service_category" id="service_category" required>
+                    <?php echo $service_category_list; ?>
+                </select>
+            </div>
             <div class="col-sm-12">
                 <br/>
                 Service Description:

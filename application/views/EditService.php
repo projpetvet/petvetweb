@@ -15,6 +15,11 @@
                 <input type="hidden" name="serviceid" id="serviceid">
                 <input type="text" class="form-control" name="editServiceName" id="editServiceName" placeholder="Service Name" required/>
             </div>
+            <div class="col-sm-6">
+                <select class="form-control" name="service_category" id="service_category" required>
+                    <?php echo $service_category_list; ?>
+                </select>
+            </div>
             <div class="col-sm-12">
                 <br/>
                 Service Description:
@@ -60,6 +65,7 @@
                     tinyMCE.activeEditor.setContent(data['decoded']);
                 }, 1000);
                 $('#editServicePrice').val(data[0]['price']);
+                $('#service_category').val(data[0]['service_category']);
                 $('#currentImage').html("<img src='" + window.location.origin + "/www/images/services/" + data[0]['image'] + "' style='width:300px'>");
             }
         });

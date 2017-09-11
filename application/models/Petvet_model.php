@@ -69,15 +69,15 @@ class Petvet_model extends CI_Model {
     public function saveServiceDetails($data,$savedImage) {
         extract($data);
         $serviceDescriptionEncoded = htmlentities($serviceDescription);
-        $insertService = "INSERT INTO service(name, description, price, image, enabled) VALUES(?, ?, ?, ?, ?)";
-        $this->pdo->query($insertService, array($serviceName, $serviceDescriptionEncoded, $servicePrice, $savedImage, 1));
+        $insertService = "INSERT INTO service(name, description, price, image, enabled, service_category) VALUES(?, ?, ?, ?, ?,?)";
+        $this->pdo->query($insertService, array($serviceName, $serviceDescriptionEncoded, $servicePrice, $savedImage, 1, $service_category));
     }
 
     public function updateServiceDetails($data) {
         extract($data);
         $editServiceDescriptionEncoded = htmlentities($editServiceDescription);
-        $insertService = "UPDATE service SET name = ?, description = ?, price = ? WHERE id = ?";
-        $this->pdo->query($insertService, array($editServiceName, $editServiceDescriptionEncoded, $editServicePrice, $edit_id));
+        $insertService = "UPDATE service SET name = ?, description = ?, price = ?, service_category = ? WHERE id = ?";
+        $this->pdo->query($insertService, array($editServiceName, $editServiceDescriptionEncoded, $editServicePrice, $service_category, $edit_id));
     }
     
     public function updateProductDetails($data) {
@@ -237,7 +237,10 @@ class Petvet_model extends CI_Model {
     }
 
     public function getServicesDetails() {
-        $selectServices = $this->pdo->query("SELECT * FROM service WHERE enabled = 1");
+        $selectServices = $this->pdo->query("SELECT s.*,sc.name as service_category_caption FROM service as s
+            LEFT JOIN service_category as sc
+            ON s.service_category = sc.id
+            WHERE s.enabled = 1");
         return $selectServices;
     }
 

@@ -341,7 +341,7 @@ class Admin extends CI_Controller {
     public function BuildServiceCategories($selected = 0)
     {
         $options = '<option value="">(Select Service Category)</option>';
-        $stmt = $this->model->GetProductCategories();
+        $stmt = $this->model->GetServiceCategories();
         foreach ($stmt->result() as $row)
         {
             if($row->id == $selected)
@@ -527,6 +527,7 @@ class Admin extends CI_Controller {
             header('Location: /admin');
         } else {
             $data = array();
+            $data['service_category_list'] = $this->BuildServiceCategories();
             if(isset($_SESSION['message']))
             {
                 $data['message'] = $_SESSION['message'];
@@ -666,6 +667,7 @@ class Admin extends CI_Controller {
         } else {
             $data = array();
             $data['edit_id'] = $GLOBALS['params'][0];
+            $data['service_category_list'] = $this->BuildServiceCategories();
             if(isset($_SESSION['message']))
             {
                 $data['message'] = $_SESSION['message'];
