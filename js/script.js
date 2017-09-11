@@ -125,6 +125,34 @@ $(document).ready(function ()
             });
         }
     });
+    
+    $(document).on("click", ".btnRemoveProductCategory", function () {
+        var elem = $(this);
+        var id = $(this).attr("data-id");
+        var confirmRemove = confirm("Are you sure you want to remove this category?");
+        if (confirmRemove)
+        {
+            $.ajax({
+                url: "/admin/removeCategory",
+                type: "POST",
+                data: {
+                    id: id
+                },
+                dataType: "json",
+                success: function (data)
+                {
+                    if(data.success)
+                    {
+                        $(elem).parents('tr').fadeOut('slow');
+                    }
+                    else
+                    {
+                        alert("Error removing from the database.");
+                    }
+                }
+            });
+        }
+    });
 
     $("#btnUpdateMember").click(function () {
         var id = $("#editid").val();

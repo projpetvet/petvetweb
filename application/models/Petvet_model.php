@@ -875,5 +875,86 @@ class Petvet_model extends CI_Model {
             exit;
         }
     }
+    
+    public function GetProductCategories() {
+        try 
+        {
+            $stmt = $this->pdo->query("SELECT * FROM product_category 
+                                        WHERE enabled = 1
+                                        ORDER BY name
+                                    ");
+            return $stmt;
+        }
+        catch (Exception $ex) {
+            echo $ex;
+            exit;
+        }
+    }
+    
+    public function SaveProductCategory($data) {
+        try 
+        {
+            extract($data);
+            $sql = "INSERT INTO product_category 
+                                        SET name = ?,
+                                        description = ?
+                                        ";
+            $stmt = $this->pdo->query($sql,array($name,$description));
+            return $stmt;
+        }
+        catch (Exception $ex) {
+            echo $ex;
+            exit;
+        }
+    }
+    
+    public function GetProductCategoryById($id) {
+        try 
+        {
+            $sql = "SELECT * FROM product_category 
+                    WHERE id = ?
+                    ";
+            $stmt = $this->pdo->query($sql,array($id));
+            return $stmt;
+        }
+        catch (Exception $ex) {
+            echo $ex;
+            exit;
+        }
+    }
+    
+    public function UpdateProductCategory($data) {
+        try 
+        {
+            extract($data);
+            $sql = "UPDATE product_category 
+                                        SET name = ?,
+                                        description = ?
+                                        WHERE id = ?
+                                        ";
+            $stmt = $this->pdo->query($sql,array($name,$description,$id));
+            return $stmt;
+        }
+        catch (Exception $ex) {
+            echo $ex;
+            exit;
+        }
+    }
+    
+    public function RemoveCategory($id) {
+        try 
+        {
+            $sql = "UPDATE product_category 
+                                        SET enabled = 0
+                                        WHERE id = ?
+                                        ";
+            $stmt = $this->pdo->query($sql,array($id));
+            return $stmt;
+        }
+        catch (Exception $ex) {
+            echo $ex;
+            exit;
+        }
+    }
 }
 ?>

@@ -80,6 +80,17 @@ class Admin extends CI_Controller {
             $this->load->view('Footer', $data);
         }
     }
+    
+    public function ProductCategories() {
+        if ($this->session->uname == NULL) {
+            header('Location: /admin');
+        } else {
+            $data['category_list'] = $this->GetProductCategoriesList();
+            $this->load->view('Header', $data);
+            $this->load->view('ProductCategories', $data);
+            $this->load->view('Footer', $data);
+        }
+    }
 
     public function getProductsList() {
         $products = '';
@@ -94,6 +105,16 @@ class Admin extends CI_Controller {
             }
             
             $products .= $this->load->view('lists/products', $data, true);
+        }
+        return $products;
+    }
+    
+    public function GetProductCategoriesList() {
+        $products = '';
+        $result = $this->model->GetProductCategories();
+        foreach ($result->result() as $row) 
+        {   
+            $products .= $this->load->view('lists/productcategories', $row, true);
         }
         return $products;
     }
@@ -273,6 +294,62 @@ class Admin extends CI_Controller {
             $this->load->view('Header');
             $this->load->view('AddNewProduct');
             $this->load->view('Footer');
+        }
+    }
+    
+    public function AddNewProductCategory() {
+        if ($this->session->uname == NULL) {
+            header('Location: /admin');
+        } else {
+            $data = array();
+            if(isset($_SESSION['message']))
+            {
+                $data['message'] = $_SESSION['message'];
+                unset($_SESSION['message']);
+            }
+            else
+            {
+                $data['message'] = '';
+            }
+            $this->load->view('Header');
+            $this->load->view('AddNewProductCategory',$data);
+            $this->load->view('Footer');
+        }
+    }
+    
+    public function EditProductCategory() {
+        if ($this->session->uname == NULL) {
+            header('Location: /admin');
+        } else {
+            if(isset($GLOBALS['params'][0]))
+            {
+                $data = array();
+                $id = $GLOBALS['params'][0];
+                $stmt = $this->model->GetProductCategoryById($id);
+                foreach($stmt->result() as $row)
+                {
+                    $data['id'] = $row->id;
+                    $data['name'] = $row->name;
+                    $data['description'] = $row->description;
+                }
+                
+                if(isset($_SESSION['message']))
+                {
+                    $data['message'] = $_SESSION['message'];
+                    unset($_SESSION['message']);
+                }
+                else
+                {
+                    $data['message'] = '';
+                }
+                $this->load->view('Header');
+                $this->load->view('EditProductCategory',$data);
+                $this->load->view('Footer');
+            }
+            else
+            {
+                header("location : /admin/productCategories");
+            }
         }
     }
 
@@ -1243,6 +1320,85 @@ class Admin extends CI_Controller {
         $json_data['success'] = TRUE;
         echo json_encode($json_data);
         exit;
+    }
+    
+    public function SaveProductCategory()
+    {
+        if(isset($_POST['name']) && isset($_POST['description']))
+        {
+            $_POST['description'] = htmlentities($_POST['description']);
+            $ret = $this->model->SaveProductCategory($_POST);
+            if($ret)
+            {
+                $_SESSION['message'] = $this->SuccessMessage('Product category successfully added.');
+            }
+            else
+            {
+                $_SESSION['message'] = $this->ErrorMessage('Error saving to the database.');
+            }
+        }
+        else
+        {
+            $_SESSION['message'] = $this->ErrorMessage('There are missing fields.');
+        }
+        
+        header('Location: /admin/AddNewProductCategory');
+        
+    }
+    
+    public function updateProductCategory()
+    {
+        if(isset($_POST['name']) && isset($_POST['description']) && isset($_POST['id']))
+        {
+            $_POST['description'] = htmlentities($_POST['description']);
+            $ret = $this->model->UpdateProductCategory($_POST);
+            if($ret)
+            {
+                $_SESSION['message'] = $this->SuccessMessage('Product category successfully updated.');
+            }
+            else
+            {
+                $_SESSION['message'] = $this->ErrorMessage('Error saving to the database.');
+            }
+            
+            header('Location: /admin/editProductCategory/'.$_POST['id']);
+        }
+        else
+        {
+            $_SESSION['message'] = $this->ErrorMessage('There are missing fields.');
+            header('Location: /admin/productCategories/');
+        }
+        
+    }
+    
+    public function removeCategory()
+    {
+        $json_data = array();
+        if(isset($_POST['id']))
+        {
+            $json_data['success'] = $this->model->RemoveCategory($_POST['id']);
+        }
+        else
+        {
+            $json_data['success'] = FALSE;
+        }
+        
+        echo json_encode($json_data);
+        exit;
+    }
+
+    public function SuccessMessage($message)
+    {
+        return '<div class="alert alert-success">
+                <strong>Success!</strong> '.$message.'
+              </div>';
+    }
+    
+    public function ErrorMessage($message)
+    {
+        return '<div class="alert alert-danger">
+                <strong>Error!</strong> '.$message.'
+              </div>';
     }
 }
 

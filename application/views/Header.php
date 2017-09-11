@@ -48,6 +48,9 @@
                     <a href="/admin/products">
                         <li class="list-group-item">Products </li>
                     </a>
+                    <a href="/admin/productCategories">
+                        <li class="list-group-item">Product Categories </li>
+                    </a>
                     <a href="/admin/services">
                         <li class="list-group-item">Services </li>
                     </a>
