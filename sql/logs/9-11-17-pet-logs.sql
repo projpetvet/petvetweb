@@ -1,0 +1,1 @@
+ALTER TABLE `pet` ADD `birthday` DATE NOT NULL AFTER `name`, ADD `color` VARCHAR(125) NOT NULL AFTER `birthday`;
