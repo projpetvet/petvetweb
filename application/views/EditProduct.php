@@ -15,6 +15,11 @@
                 <input type="hidden" name="productid" id="productid">
                 <input type="text" class="form-control" name="editProductName" id="editProductName" placeholder="Product Name" required/>
             </div>
+            <div class="col-sm-6">
+                <select class="form-control" name="product_category" id="product_category" required>
+                    <?php echo $product_category_list; ?>
+                </select>
+            </div>
             <div class="col-sm-12">
                 <br/>
                 Product Description:
@@ -66,6 +71,7 @@
                 }, 1000);
                 $('#editProductPrice').val(data[0]['price']);
                 $('#editProductStock').val(data[0]['stock']);
+                $('#product_category').val(data[0]['product_category']);
                 $('#currentImage').html("<img src='" + window.location.origin + "/www/images/products/" + data[0]['image'] + "' style='width:300px'>");
             }
         });

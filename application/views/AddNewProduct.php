@@ -14,6 +14,11 @@
             <div class="col-sm-6">
                 <input type="text" class="form-control" name="productName" id="productName" placeholder="Product Name" required/>
             </div>
+            <div class="col-sm-6">
+                <select class="form-control" name="product_category" id="product_category" required>
+                    <?php echo $product_category_list; ?>
+                </select>
+            </div>
             <div class="col-sm-12">
                 <br/>
                 Product Description:

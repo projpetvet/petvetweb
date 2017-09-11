@@ -312,12 +312,50 @@ class Admin extends CI_Controller {
         if ($this->session->uname == NULL) {
             header('Location: /admin');
         } else {
+            $data = array();
+            $data['product_category_list'] = $this->BuildProductCategories();
             $this->load->view('Header');
-            $this->load->view('AddNewProduct');
+            $this->load->view('AddNewProduct',$data);
             $this->load->view('Footer');
         }
     }
     
+    public function BuildProductCategories($selected = 0)
+    {
+        $options = '<option value="">(Select Product Category)</option>';
+        $stmt = $this->model->GetProductCategories();
+        foreach ($stmt->result() as $row)
+        {
+            if($row->id == $selected)
+            {
+                $options .= '<option value="'.$row->id.'" selected>'.$row->name.'</option>';
+            }
+            else
+            {
+                $options .= '<option value="'.$row->id.'">'.$row->name.'</option>';
+            }
+        }
+        return $options;
+    }
+    
+    public function BuildServiceCategories($selected = 0)
+    {
+        $options = '<option value="">(Select Service Category)</option>';
+        $stmt = $this->model->GetProductCategories();
+        foreach ($stmt->result() as $row)
+        {
+            if($row->id == $selected)
+            {
+                $options .= '<option value="'.$row->id.'" selected>'.$row->name.'</option>';
+            }
+            else
+            {
+                $options .= '<option value="'.$row->id.'">'.$row->name.'</option>';
+            }
+        }
+        return $options;
+    }
+
     public function AddNewProductCategory() {
         if ($this->session->uname == NULL) {
             header('Location: /admin');
@@ -649,6 +687,7 @@ class Admin extends CI_Controller {
         } else {
             $data = array();
             $data['edit_id'] = $GLOBALS['params'][0];
+            $data['product_category_list'] = $this->BuildProductCategories();
             if(isset($_SESSION['message']))
             {
                 $data['message'] = $_SESSION['message'];

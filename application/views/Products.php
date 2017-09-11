@@ -14,6 +14,7 @@
                         <th>Price</th>
                         <th>Stock</th>
                         <th>Preview</th>
+                        <th>Category</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
