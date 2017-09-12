@@ -145,7 +145,7 @@
         $(".gmail-account").click(function(){
            var name = $("#g-name").html();
            var web_key = $("#g-email").html();
-           window.location.href = 'http://petvet.dev.ph/webservice/registerWebUser?name='+name+"&web_key="+web_key;
+           window.location.href = 'http://projpetvet.000webhostapp.com/webservice/registerWebUser?name='+name+"&web_key="+web_key;
         });
     });
 
