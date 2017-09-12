@@ -310,6 +310,36 @@ Class WebserviceModel extends CI_Model {
         }
     }
     
+    public function GetPetsFullDetailsByOwner($id)
+    {
+        try
+        {
+            $sql = "SELECT pet.owner_id AS ownerid,
+                    pet.id AS petid,
+                    customer.firstname AS owner, 
+                    pet.name AS petname, 
+                    pet.sex AS gender,
+                    pet.color AS color,
+                    pet.birthday AS birthday,
+                    specie.name AS specie,
+                    breed.name AS breed
+                    FROM customer, pet, specie, breed
+                    WHERE customer.id = pet.owner_id 
+                    AND pet.specie_id = specie.id 
+                    AND pet.breed_id = breed.id
+                    AND pet.owner_id = ?
+                    ORDER BY pet.name";
+            
+            $stmt = $this->pdo->query($sql,array($id));
+            return $stmt->result();
+        } 
+        catch (Exception $ex) 
+        {
+            echo $ex;
+            exit;
+        }
+    }
+    
     public function RequestAppointment($data)
     {
         try
@@ -361,6 +391,23 @@ Class WebserviceModel extends CI_Model {
                     WHERE customer_id = ?
                     ORDER BY id DESC";
             $stmt = $this->pdo->query($sql,array($customer_id));
+            return $stmt;
+        } 
+        catch (Exception $ex) 
+        {
+            echo $ex;
+            exit;
+        }
+    }
+    
+    public function GetAppointmentByPetId($id)
+    {
+        try
+        {
+            $sql = "SELECT * FROM appointment 
+                    WHERE pet_id = ?
+                    ORDER BY id DESC";
+            $stmt = $this->pdo->query($sql,array($id));
             return $stmt;
         } 
         catch (Exception $ex) 

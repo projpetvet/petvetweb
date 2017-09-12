@@ -340,6 +340,24 @@ class Webservice extends CI_Controller {
         exit;
     }
     
+    public function GetAppointmentByPetId()
+    {
+        $json_data = array();
+        $json_data['app_list'] = array();
+        $stmt = $this->model->GetAppointmentByPetId($_POST['id']);
+        foreach($stmt->result() as $row)
+        {
+            $row->app_date = date("M d o", strtotime($row->app_date));
+            $row->app_time = $this->model->GetTimeTableById($row->app_time);
+            $row->status_caption = $this->ServiceStatus[$row->status];
+            array_push($json_data['app_list'], $row);
+        }
+        
+        $json_data['success'] = TRUE;
+        echo json_encode($json_data);
+        exit;
+    }
+    
     public function GetAppointmentDetailById()
     {
         $json_data = array();
@@ -518,6 +536,15 @@ class Webservice extends CI_Controller {
 
             $json_data['success'] = TRUE;
         }
+        echo json_encode($json_data);
+        exit;
+    }
+    
+    public function GetMyPets()
+    {
+        $json_data = array();
+        $json_data['list'] = $this->model->GetPetsFullDetailsByOwner($_POST['customer_id']);
+        $json_data['success'] = TRUE;
         echo json_encode($json_data);
         exit;
     }
