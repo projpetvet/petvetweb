@@ -266,37 +266,62 @@ class Webservice extends CI_Controller {
     public function RequestAppointment()
     {
         $json_data = array();
-        $id = $this->model->RequestAppointment($_POST);
-        $json_data['id'] = $id;
-        if($id > 0)
+        $json_data['error_code'] = '';
+        if($this->CheckIfSchedIsAvailable($_POST['app_time'],$_POST['app_date']))
         {
-            $services = explode(',', $_POST['selected_services']);
-            $total = 0;
-            foreach($services as $service_id)
+            $id = $this->model->RequestAppointment($_POST);
+            $json_data['id'] = $id;
+            if($id > 0)
             {
-                $this->model->RequestAppointmentService($id,$service_id);
-                $service_detail = $this->model->GetServiceById($service_id);
-                $total += floatval($service_detail->price);
+                $services = explode(',', $_POST['selected_services']);
+                $total = 0;
+                foreach($services as $service_id)
+                {
+                    $this->model->RequestAppointmentService($id,$service_id);
+                    $service_detail = $this->model->GetServiceById($service_id);
+                    $total += floatval($service_detail->price);
+                }
+                $this->model->SetAppointmentTotal($id,$total);
+
+                $this->model->SaveSchedule($_POST['app_time'],$id,$_POST['app_date']);
+                
+                $customer_info = $this->model->GetCustomerById($_POST['customer_id']);
+                $sms_data = array();
+                $sms_data['recepient'] = $customer_info['mobile'];
+                $sms_data['message'] = 'Hi '.$customer_info['firstname'].', thank you for the appointment you made with ID #'.$id.'. This is a confirmation that your appointment request has been successfully received.';
+                $this->sms->InsertMessage($sms_data);
+
+                $json_data['success'] = TRUE;
             }
-            $this->model->SetAppointmentTotal($id,$total);
-            
-            $customer_info = $this->model->GetCustomerById($_POST['customer_id']);
-            $sms_data = array();
-            $sms_data['recepient'] = $customer_info['mobile'];
-            $sms_data['message'] = 'Hi '.$customer_info['firstname'].', thank you for the appointment you made with ID #'.$id.'. This is a confirmation that your appointment request has been successfully received.';
-            $this->sms->InsertMessage($sms_data);
-            
-            $json_data['success'] = TRUE;
+            else
+            {
+                $json_data['success'] = FALSE;
+                $json_data['message'] = "Error in inserting to the database";
+            }
         }
         else
         {
             $json_data['success'] = FALSE;
-            $json_data['message'] = "Error in inserting to the database";
+            $json_data['message'] = "Time already reserved";
+            $json_data['error_code'] = 'TIME_ERROR';
         }
         echo json_encode($json_data);
         exit;
     }
     
+    public function CheckIfSchedIsAvailable($app_time,$app_date)
+    {
+        $result = $this->model->CheckIfSchedIsAvailable($app_time,$app_date);
+        if(empty($result))
+        {
+            return TRUE;
+        }
+        else
+        {
+            return FALSE;
+        }
+    }
+
     public function GetAppointmentByCustomerId()
     {
         $json_data = array();
@@ -305,7 +330,7 @@ class Webservice extends CI_Controller {
         foreach($stmt->result() as $row)
         {
             $row->app_date = date("M d o", strtotime($row->app_date));
-            $row->app_time = date("h:i a", strtotime($row->app_time));
+            $row->app_time = $this->model->GetTimeTableById($row->app_time);
             $row->status_caption = $this->ServiceStatus[$row->status];
             array_push($json_data['app_list'], $row);
         }
@@ -323,7 +348,7 @@ class Webservice extends CI_Controller {
         foreach($stmt->result() as $row)
         {
             $row->app_date = date("M d o", strtotime($row->app_date));
-            $row->app_time = date("h:i a", strtotime($row->app_time));
+            $row->app_time = $this->model->GetTimeTableById($row->app_time);
             $row->status_caption = $this->ServiceStatus[$row->status];
             $json_data['app_detail'] = $row;
             
@@ -344,6 +369,11 @@ class Webservice extends CI_Controller {
     {
         $json_data = array();
         $json_data['success'] = $this->model->CancelAppointment($_POST['id']);
+        if($json_data['success'])
+        {
+            $this->model->RemoveAppointmentInTimeTable($_POST['id']);
+        }
+        
         if(!$json_data['success'])
         {
             $json_data['message'] = "An error occured.";
@@ -457,5 +487,38 @@ class Webservice extends CI_Controller {
             $randomString .= $characters[rand(0, $charactersLength - 1)];
         }
         return $randomString;
+    }
+    
+    public function GetTimeTable()
+    {
+        $sched_date = $_POST['sched_date'];
+        $date_now = date('Y-m-d');
+        $json_data = array();
+        if(strtotime($date_now) > strtotime($sched_date))
+        {
+            $json_data['success'] = FALSE;
+            $json_data['message'] = 'Invalid date!';
+        }
+        else if(date('Y', strtotime($date_now)) != date('Y', strtotime($sched_date)))
+        {
+            $json_data['success'] = FALSE;
+            $json_data['message'] = 'Invalid year! You may only make an appointment this year';
+        }
+        else
+        {
+            $json_data['sched'] = array();
+            $stmt = $this->model->GetTimeTable($sched_date);
+            foreach ($stmt->result() as $row)
+            {
+                if($row->ttaid == '')
+                {
+                    array_push($json_data['sched'], $row);
+                }
+            }
+
+            $json_data['success'] = TRUE;
+        }
+        echo json_encode($json_data);
+        exit;
     }
 }

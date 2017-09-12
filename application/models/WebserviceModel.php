@@ -321,9 +321,10 @@ Class WebserviceModel extends CI_Model {
                     doctor_id = ?,
                     app_date = ?,
                     app_time = ?,
+                    note = ?,
                     status = 1
                     ";
-            $stmt = $this->pdo->query($sql,array($customer_id,$pet_id,$doctor_id,$app_date,$app_time));
+            $stmt = $this->pdo->query($sql,array($customer_id,$pet_id,$doctor_id,$app_date,$app_time,$note));
             $id = $this->pdo->insert_id();
             return $id;
         } 
@@ -590,6 +591,98 @@ Class WebserviceModel extends CI_Model {
                     SET web_code = ?
                     WHERE web_key = ?";
             $stmt = $this->pdo->query($sql,array($web_code,$webkey));
+            return $stmt;
+        } 
+        catch (Exception $ex) 
+        {
+            echo $ex;
+            exit;
+        }
+    }
+    
+    public function GetTimeTable($date)
+    {
+        try
+        {
+            $sql = "SELECT tt.*,tta.id as ttaid 
+                    FROM time_table as tt 
+                    LEFT JOIN time_table_appointments AS tta 
+                    ON ((tt.id = tta.time_table_id) AND (tta.appointment_date = ?))";
+            $stmt = $this->pdo->query($sql,array($date));
+            return $stmt;
+        } 
+        catch (Exception $ex) 
+        {
+            echo $ex;
+            exit;
+        }
+    }
+    
+    public function CheckIfSchedIsAvailable($app_time,$app_date)
+    {
+        try
+        {
+            $sql = "SELECT tt.*,tta.id as ttaid 
+                    FROM time_table as tt 
+                    INNER JOIN time_table_appointments AS tta 
+                    ON ((tt.id = tta.time_table_id) AND (tta.appointment_date = ?) AND (tta.time_table_id = ?))";
+            $stmt = $this->pdo->query($sql,array($app_date,$app_time));
+            return $stmt->result();
+        } 
+        catch (Exception $ex) 
+        {
+            echo $ex;
+            exit;
+        }
+    }
+    
+    public function SaveSchedule($app_time,$app_id,$app_date)
+    {
+        try
+        {
+            $sql = "INSERT INTO time_table_appointments
+                    SET time_table_id = ?,
+                    appointment_id = ?,
+                    appointment_date = ?";
+            $stmt = $this->pdo->query($sql,array($app_time,$app_id,$app_date));
+            return $stmt;
+        } 
+        catch (Exception $ex) 
+        {
+            echo $ex;
+            exit;
+        }
+    }
+    
+    public function GetTimeTableById($id)
+    {
+        try
+        {
+            $sql = "SELECT * FROM time_table WHERE id = ?";
+            $stmt = $this->pdo->query($sql,array($id));
+            $result = $stmt->result();
+            if(!empty($result))
+            {
+                return $result[0]->time_range;
+            }
+            else
+            {
+                return '';
+            }
+        } 
+        catch (Exception $ex) 
+        {
+            echo $ex;
+            exit;
+        }
+    }
+    
+    public function RemoveAppointmentInTimeTable($id)
+    {
+        try
+        {
+            $sql = "DELETE FROM time_table_appointments WHERE appointment_id = ?";
+            $stmt = $this->pdo->query($sql,array($id));
             return $stmt;
         } 
         catch (Exception $ex) 

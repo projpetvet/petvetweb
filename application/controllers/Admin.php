@@ -875,6 +875,13 @@ class Admin extends CI_Controller {
     {
         $json_data = array();
         $json_data['success'] = $this->model->ChangeAppointmentStatus($_POST['app_id'],$_POST['status']);
+        if($json_data['success'])
+        {
+            if(($_POST['status'] == 3) || $_POST['status'] == 5)
+            {
+                $this->model->RemoveAppointmentInTimeTable($_POST['app_id']);
+            }
+        }
         
         $customer_id = $this->model->GetAppointmentCustomerById($_POST['app_id']);
         $customer_info = $this->model->GetCustomerById($customer_id);
@@ -906,7 +913,7 @@ class Admin extends CI_Controller {
             foreach ($stmt->result() as $row)
             {
                 $row->app_date = date("M d o", strtotime($row->app_date));
-                $row->app_time = date("h:i a", strtotime($row->app_time));
+                $row->app_time = $this->model->GetTimeTableById($row->app_time);
                 $row->status_caption = $this->app_status_caption[$row->status];
                 $data['list'] .= $this->load->view("AppointmentList",$row,TRUE);
             }

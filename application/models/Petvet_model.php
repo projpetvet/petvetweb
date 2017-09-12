@@ -1082,5 +1082,44 @@ class Petvet_model extends CI_Model {
             exit;
         }
     }
+    
+    public function RemoveAppointmentInTimeTable($id)
+    {
+        try
+        {
+            $sql = "DELETE FROM time_table_appointments WHERE appointment_id = ?";
+            $stmt = $this->pdo->query($sql,array($id));
+            return $stmt;
+        } 
+        catch (Exception $ex) 
+        {
+            echo $ex;
+            exit;
+        }
+    }
+    
+    public function GetTimeTableById($id)
+    {
+        try
+        {
+            $sql = "SELECT * FROM time_table WHERE id = ?";
+            $stmt = $this->pdo->query($sql,array($id));
+            $result = $stmt->result();
+            if(!empty($result))
+            {
+                return $result[0]->time_range;
+            }
+            else
+            {
+                return '';
+            }
+        } 
+        catch (Exception $ex) 
+        {
+            echo $ex;
+            exit;
+        }
+    }
+    
 }
 ?>

@@ -29,6 +29,10 @@
                         <td width="*" class="cell-2"><?php echo $app_time; ?></td>
                     </tr>
                     <tr>
+                        <td width="20%" class="cell-1">Note</td>
+                        <td width="*" class="cell-2"><?php echo $note; ?></td>
+                    </tr>
+                    <tr>
                         <td width="20%" class="cell-1">Status</td>
                         <td width="*" class="cell-2"><?php echo $status_caption; ?></td>
                     </tr>
