@@ -401,6 +401,42 @@ class Petvet_model extends CI_Model {
         }
     }
     
+    public function GetAppointmentRecords($table,$id)
+    {
+        try
+        {
+            $where_query = '';
+            if($table == 'customer')
+            {
+                $where_query = "WHERE a.customer_id = ?";
+            }
+            else if($table == 'pet')
+            {
+                $where_query = "WHERE a.pet_id = ?";
+            }
+            
+            $sql = "SELECT a.*, CONCAT(c.firstname,' ',c.lastname) as customer,
+                    CONCAT(d.firstname,' ',d.lastname) as doctor,
+                    p.name as pet
+                    FROM appointment as a
+                    INNER JOIN customer as c
+                    ON a.customer_id = c.id
+                    INNER JOIN doctor as d
+                    ON a.doctor_id = d.id
+                    INNER JOIN pet as p
+                    ON a.pet_id = p.id
+                    $where_query
+                    ORDER BY a.id DESC";
+            $stmt = $this->pdo->query($sql,array($id));
+            return $stmt;
+        } 
+        catch (Exception $ex) 
+        {
+            echo $ex;
+            exit;
+        }
+    }
+    
     public function GetAppointmentById($id)
     {
         try

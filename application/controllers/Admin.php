@@ -917,6 +917,56 @@ class Admin extends CI_Controller {
         }
     }
     
+    public function Records()
+    {
+        if ($this->session->uname == NULL) 
+        {
+            header('Location: /admin');
+        } 
+        else 
+        {
+            $data = array();
+            
+            $table = 0;
+            $id = 0;
+            if(isset($GLOBALS['params'][0]))
+            {
+                $table = $GLOBALS['params'][0];
+            }
+            
+            if(isset($GLOBALS['params'][1]))
+            {
+                $id = $GLOBALS['params'][1];
+            }
+            
+            if($table == 'customer')
+            {
+                $result = $this->model->GetCustomerById($id);
+                $data['caption'] = $result['firstname'].' '.$result['lastname'].'\'s'.' Records';
+            }
+            else if($table == 'pet') 
+            {
+                $result = $this->model->getPetData($id);
+                $data['caption'] = $result->name.'\'s'.' Records';
+            }
+            
+        }
+            
+            $data['list'] = '';
+            $stmt = $this->model->GetAppointmentRecords($table,$id);
+            foreach ($stmt->result() as $row)
+            {
+                $row->app_date = date("M d o", strtotime($row->app_date));
+                $row->app_time = date("h:i a", strtotime($row->app_time));
+                $row->status_caption = $this->app_status_caption[$row->status];
+                $data['list'] .= $this->load->view("AppointmentList",$row,TRUE);
+            }
+            
+            $this->load->view('Header');
+            $this->load->view('AppointmentRecords',$data);
+            $this->load->view('Footer');
+    }
+    
     public function BuildAppointmentStatus($selected = 0)
     {
         $options = '<option value="">All Status</option>';

@@ -10,6 +10,8 @@
 	<td class="txt-center">
 		<button id="btnEditPet" class="btn btn-default" data-id="<?php echo $petid; ?>" owner-id="<?php echo $ownerid; ?>">Edit</button>
 		<button id="btnRemovePet" class="btn btn-danger" data-id="<?php echo $petid; ?>">Remove</button>
-		<button id="btnViewPetRecords" class="btn btn-info" data-id="<?php echo $petid; ?>">Records</button>
+		<a href="/admin/records/pet/<?php echo $petid; ?>" target="_blank">
+                    <button class="btn btn-info btnViewPetRecords" data-id="<?php echo $petid; ?>">Records</button>
+                </a>
 	</td>
 </tr>

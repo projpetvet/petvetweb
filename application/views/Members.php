@@ -16,7 +16,7 @@
                         <th>First Name</th>
                         <th>Last Name</th>
                         <th>Mobile Number</th>
-                        <th>Actions</th>
+                        <th class="txt-center">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
