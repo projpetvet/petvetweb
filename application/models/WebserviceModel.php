@@ -533,9 +533,11 @@ Class WebserviceModel extends CI_Model {
                     name = ?,
                     breed_id = ?,
                     specie_id = ?,
-                    sex = ?
+                    sex = ?,
+                    color = ?,
+                    birthday = ?
                     ";
-            $stmt = $this->pdo->query($sql,array($customer,$name,$breed,$specie,$gender));
+            $stmt = $this->pdo->query($sql,array($customer,$name,$breed,$specie,$gender,$color,$birthday));
             return $stmt;
         } 
         catch (Exception $ex) 
