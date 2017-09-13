@@ -614,4 +614,25 @@ class Webservice extends CI_Controller {
             return TRUE;
         }
     }
+    
+    public function IsStockSufficient()
+    {
+        $id = $_POST['id'];
+        $quantity = $_POST['quantity'];
+        $stock = $this->model->CheckStock($id);
+        $json_data = array();
+        $json_data['current_stock'] = $stock;
+        $json_data['success'] = TRUE;
+        if($stock >= $quantity )
+        {
+            $json_data['sufficient'] = TRUE;
+        }
+        else
+        {
+            $json_data['sufficient'] = FALSE;
+        }
+        
+        echo json_encode($json_data);
+        exit;
+    }
 }

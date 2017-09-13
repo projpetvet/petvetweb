@@ -786,6 +786,23 @@ Class WebserviceModel extends CI_Model {
             exit;
         }
     }
+    
+    public function CheckStock($id)
+    {
+        try
+        {
+            $sql = "SELECT stock from product
+                    where id = ?";
+            $stmt = $this->pdo->query($sql,array($id));
+            $result = $stmt->result();
+            return $result[0]->stock;
+        } 
+        catch (Exception $ex) 
+        {
+            echo $ex;
+            exit;
+        }
+    }
 }
 
 ?> 
