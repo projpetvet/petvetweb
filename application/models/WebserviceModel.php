@@ -127,14 +127,38 @@ Class WebserviceModel extends CI_Model {
         }
     }
     
-    public function GetProducts()
+    public function GetProducts($search,$category)
     {
         try
         {
+            $query = '';
+            if(trim($search) != '')
+            {
+                $query .= ' AND name like ?';
+            }
+            
+            if(trim($category) != '')
+            {
+                $query .= ' AND product_category = ?';
+            }
+            
             $sql = "SELECT * FROM product 
                     WHERE enabled = 1
+                    $query
                     ORDER BY name";
-            $stmt = $this->pdo->query($sql);
+            $params = array();
+            
+            if(trim($search) != '')
+            {
+                array_push($params, '%'.$search.'%');
+            }
+            
+            if(trim($category) != '')
+            {
+                array_push($params, $category);
+            }
+            
+            $stmt = $this->pdo->query($sql,$params);
             return $stmt;
         } 
         catch (Exception $ex) 
@@ -837,6 +861,23 @@ Class WebserviceModel extends CI_Model {
                     WHERE id = ?";
             $stmt = $this->pdo->query($sql,array($code,$id));
             return $stmt;
+        } 
+        catch (Exception $ex) 
+        {
+            echo $ex;
+            exit;
+        }
+    }
+    
+    public function GetProductCategories()
+    {
+        try
+        {
+            $sql = "SELECT * FROM  product_category 
+                WHERE enabled = 1
+                ORDER BY name";
+            $stmt = $this->pdo->query($sql);
+            return $stmt->result();
         } 
         catch (Exception $ex) 
         {

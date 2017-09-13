@@ -158,7 +158,7 @@ class Webservice extends CI_Controller {
     {
         $json_data = array();
         $json_data['list'] = array();
-        $stmt = $this->model->GetProducts();
+        $stmt = $this->model->GetProducts($_POST['search'],$_POST['category']);
         foreach($stmt->result() as $row)
         {
             $row->description = html_entity_decode($row->description);
@@ -666,6 +666,15 @@ class Webservice extends CI_Controller {
         $sms_data['message'] = 'Hi '.$customer_info['firstname'].', here is your account verification code: '.$code;
         $this->sms->InsertMessage($sms_data);
         
+        echo json_encode($json_data);
+        exit;
+    }
+    
+    public function GetProductCategories()
+    {
+        $json_data = array();
+        $json_data['list'] = $this->model->GetProductCategories();
+        $json_data['success'] = TRUE;
         echo json_encode($json_data);
         exit;
     }
