@@ -1461,7 +1461,7 @@ class Admin extends CI_Controller {
             $_SESSION['message'] = $this->ErrorMessage('There are missing fields.');
         }
         
-        header('Location: /admin/AddNewProductCategory');
+        $this->redirect('/admin/AddNewProductCategory');
         
     }
     
@@ -1480,12 +1480,12 @@ class Admin extends CI_Controller {
                 $_SESSION['message'] = $this->ErrorMessage('Error saving to the database.');
             }
             
-            header('Location: /admin/editProductCategory/'.$_POST['id']);
+            $this->redirect('/admin/editProductCategory/'.$_POST['id']);
         }
         else
         {
             $_SESSION['message'] = $this->ErrorMessage('There are missing fields.');
-            header('Location: /admin/productCategories/');
+            $this->redirect('/admin/productCategories/');
         }
         
     }
@@ -1598,7 +1598,7 @@ class Admin extends CI_Controller {
             $_SESSION['message'] = $this->ErrorMessage('There are missing fields.');
         }
         
-        header('Location: /admin/AddNewServiceCategory');
+        $this->redirect('/admin/AddNewServiceCategory');
         
     }
     
@@ -1617,12 +1617,12 @@ class Admin extends CI_Controller {
                 $_SESSION['message'] = $this->ErrorMessage('Error saving to the database.');
             }
             
-            header('Location: /admin/editServiceCategory/'.$_POST['id']);
+            $this->redirect('/admin/editServiceCategory/'.$_POST['id']);
         }
         else
         {
             $_SESSION['message'] = $this->ErrorMessage('There are missing fields.');
-            header('Location: /admin/serviceCategories/');
+            $this->redirect('/admin/serviceCategories/');
         }
         
     }
@@ -1639,6 +1639,15 @@ class Admin extends CI_Controller {
         return '<div class="alert alert-danger">
                 <strong>Error!</strong> '.$message.'
               </div>';
+    }
+    
+    public function redirect($url)
+    {
+        echo "
+                <script>
+                    window.location.href = '$url';
+                </script>
+            ";
     }
 }
 
