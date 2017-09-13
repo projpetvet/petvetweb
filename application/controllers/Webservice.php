@@ -77,17 +77,34 @@ class Webservice extends CI_Controller {
     public function Register()
     {
         $json_data = array();
-        $id = $this->model->Register($_POST);
-        $json_data['id'] = $id;
-        if($id > 0)
+        if($this->isUsernameAvailable($_POST['username']))
         {
-            $json_data['success'] = TRUE;
+            if($this->isNumberAvailable($_POST['mobile']))
+            {
+                $id = $this->model->Register($_POST);
+                $json_data['id'] = $id;
+                if($id > 0)
+                {
+                    $json_data['success'] = TRUE;
+                }
+                else
+                {
+                    $json_data['success'] = FALSE;
+                    $json_data['message'] = "Error in inserting to the database";
+                }
+            }
+            else
+            {
+                $json_data['success'] = FALSE;
+                $json_data['message'] = "Mobile number already taken.";
+            }
         }
         else
         {
             $json_data['success'] = FALSE;
-            $json_data['message'] = "Error in inserting to the database";
+            $json_data['message'] = "Username already taken";
         }
+        
         echo json_encode($json_data);
         exit;
     }
@@ -95,10 +112,26 @@ class Webservice extends CI_Controller {
     public function UpdateProfile()
     {
         $json_data = array();
-        $json_data['success'] = $this->model->UpdateProfile($_POST);
-        if(!$json_data['success'])
+        if($this->isUsernameAvailable($_POST['username'],$_POST['id']))
         {
-            $json_data['message'] = "Error in updating your account";
+            if($this->isNumberAvailable($_POST['mobile'],$_POST['id']))
+            {
+                $json_data['success'] = $this->model->UpdateProfile($_POST);
+                if(!$json_data['success'])
+                {
+                    $json_data['message'] = "Error in updating your account";
+                }
+            }
+            else
+            {
+                $json_data['success'] = FALSE;
+                $json_data['message'] = "Mobile number already taken by other user";
+            }
+        }
+        else
+        {
+            $json_data['success'] = FALSE;
+            $json_data['message'] = "Username already taken by other user.";
         }
         echo json_encode($json_data);
         exit;
@@ -554,5 +587,31 @@ class Webservice extends CI_Controller {
         $json_data['success'] = TRUE;
         echo json_encode($json_data);
         exit;
+    }
+    
+    public function isUsernameAvailable($username,$id = null)
+    {
+        $is_exist = $this->model->CheckIfUsernameExist($username,$id);
+        if(!empty($is_exist->result()))
+        {
+            return FALSE;
+        }
+        else
+        {
+            return TRUE;
+        }
+    }
+    
+    public function isNumberAvailable($mobile,$id = null)
+    {
+        $is_exist = $this->model->CheckIfNumberExist($mobile, $id);
+        if(!empty($is_exist->result()))
+        {
+            return FALSE;
+        }
+        else
+        {
+            return TRUE;
+        }
     }
 }

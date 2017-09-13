@@ -621,7 +621,8 @@ Class WebserviceModel extends CI_Model {
             extract($data);
             $sql = "INSERT INTO customer
                     SET lastname = ?,
-                    web_key = ?";
+                    web_key = ?,
+                    enabled = 1";
             $stmt = $this->pdo->query($sql,array($name,$web_key));
             return $stmt;
         } 
@@ -637,7 +638,8 @@ Class WebserviceModel extends CI_Model {
         try
         {
             $sql = "UPDATE customer
-                    SET web_code = ?
+                    SET web_code = ?,
+                    enabled = 1
                     WHERE web_key = ?";
             $stmt = $this->pdo->query($sql,array($web_code,$webkey));
             return $stmt;
@@ -732,6 +734,50 @@ Class WebserviceModel extends CI_Model {
         {
             $sql = "DELETE FROM time_table_appointments WHERE appointment_id = ?";
             $stmt = $this->pdo->query($sql,array($id));
+            return $stmt;
+        } 
+        catch (Exception $ex) 
+        {
+            echo $ex;
+            exit;
+        }
+    }
+    
+    public function CheckIfUsernameExist($username,$id = null)
+    {
+        try
+        {
+            $additional_query = '';
+            if($id != null)
+            {
+                $additional_query = "AND id != $id AND enabled = 1";
+            }
+            $sql = "SELECT id from customer 
+                    where username = ?
+                    $additional_query";
+            $stmt = $this->pdo->query($sql,array($username));
+            return $stmt;
+        } 
+        catch (Exception $ex) 
+        {
+            echo $ex;
+            exit;
+        }
+    }
+    
+    public function CheckIfNumberExist($number,$id)
+    {
+        try
+        {
+            $additional_query = '';
+            if($id != null)
+            {
+                $additional_query = "AND id != $id AND enabled = 1";
+            }
+            $sql = "SELECT id from customer 
+                    where mobile = ?
+                    $additional_query";
+            $stmt = $this->pdo->query($sql,array($number));
             return $stmt;
         } 
         catch (Exception $ex) 
