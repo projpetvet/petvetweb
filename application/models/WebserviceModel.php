@@ -29,7 +29,7 @@ Class WebserviceModel extends CI_Model {
     {
         try
         {
-            $sql = "SELECT id FROM customer where username = ? and password = ?";
+            $sql = "SELECT * FROM customer where username = ? and password = ?";
             $stmt = $this->pdo->query($sql,array($username,$password));
             return $stmt->result();
         } 
@@ -69,9 +69,11 @@ Class WebserviceModel extends CI_Model {
                     email = ?,
                     username = ?,
                     password = ?,
-                    enabled = 1
+                    web_code = ?,
+                    enabled = 0,
+                    is_verified = 0
                     ";
-            $stmt = $this->pdo->query($sql,array($lastname,$firstname,$address,$mobile,$email,$username,$password));
+            $stmt = $this->pdo->query($sql,array($lastname,$firstname,$address,$mobile,$email,$username,$password,$web_code));
             $id = $this->pdo->insert_id();
             return $id;
         } 
@@ -796,6 +798,45 @@ Class WebserviceModel extends CI_Model {
             $stmt = $this->pdo->query($sql,array($id));
             $result = $stmt->result();
             return $result[0]->stock;
+        } 
+        catch (Exception $ex) 
+        {
+            echo $ex;
+            exit;
+        }
+    }
+    
+    public function VerifyAccount($id)
+    {
+        try
+        {
+            $sql = "UPDATE customer 
+                    SET web_code_valid = 0,
+                    enabled = 1,
+                    is_verified = 1
+                    WHERE id = ?";
+            $stmt = $this->pdo->query($sql,array($id));
+            return $stmt;
+        } 
+        catch (Exception $ex) 
+        {
+            echo $ex;
+            exit;
+        }
+    }
+    
+    public function ResetVerificationCode($id,$code)
+    {
+        try
+        {
+            $sql = "UPDATE customer 
+                    SET web_code_valid = 1,
+                    web_code = ?,
+                    enabled = 0,
+                    is_verified = 0
+                    WHERE id = ?";
+            $stmt = $this->pdo->query($sql,array($code,$id));
+            return $stmt;
         } 
         catch (Exception $ex) 
         {

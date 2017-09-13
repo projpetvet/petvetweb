@@ -38,6 +38,7 @@ class Webservice extends CI_Controller {
             {
                 $json_data['success'] = TRUE;
                 $json_data['id'] = $stmt[0]->id;
+                $json_data['info'] = $stmt[0];
             }
             else
             {
@@ -81,10 +82,16 @@ class Webservice extends CI_Controller {
         {
             if($this->isNumberAvailable($_POST['mobile']))
             {
+                $_POST['web_code'] = $this->generateRandomString();
                 $id = $this->model->Register($_POST);
                 $json_data['id'] = $id;
                 if($id > 0)
                 {
+                    $sms_data = array();
+                    $sms_data['recepient'] = $_POST['mobile'];
+                    $sms_data['message'] = 'Hi '.$_POST['firstname'].', here is your account verification code: '.$_POST['web_code'];
+                    $this->sms->InsertMessage($sms_data);
+                    
                     $json_data['success'] = TRUE;
                 }
                 else
@@ -631,6 +638,33 @@ class Webservice extends CI_Controller {
         {
             $json_data['sufficient'] = FALSE;
         }
+        
+        echo json_encode($json_data);
+        exit;
+    }
+    
+    public function VerifyAccount()
+    {
+        $id = $_POST['id'];
+        $json_data = array();
+        $json_data['id'] = $id;
+        $json_data['success'] = $this->model->VerifyAccount($id);
+        echo json_encode($json_data);
+        exit;
+    }
+    
+    public function ResendVerificationCode()
+    {
+        $id = $_POST['id'];
+        $json_data = array();
+        $code = $this->generateRandomString();
+        $json_data['success'] = $this->model->ResetVerificationCode($id,$code);
+        
+        $customer_info = $this->model->GetCustomerById($id);
+        $sms_data = array();
+        $sms_data['recepient'] = $customer_info['mobile'];
+        $sms_data['message'] = 'Hi '.$customer_info['firstname'].', here is your account verification code: '.$code;
+        $this->sms->InsertMessage($sms_data);
         
         echo json_encode($json_data);
         exit;
