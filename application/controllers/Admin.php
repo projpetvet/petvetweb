@@ -497,11 +497,11 @@ class Admin extends CI_Controller {
 
         if ($_POST['editProductName'] == "" || $_POST['editProductDescription'] == "" || $_POST['editProductPrice'] == "") {
             $_SESSION['message'] = "<div class='alert alert-warning errmess' role='alert'><center>Please enter valid information. Try again.</center></div>";
-            header("location: /admin/EditProduct/".$_POST['edit_id']);
+            $this->redirect("/admin/EditProduct/".$_POST['edit_id']);
         } else {
             $_SESSION['message'] = "<div class='alert alert-success errmess' role='alert'><center>Product successfully updated.</center></div>";
             $this->model->updateProductDetails($_POST);
-            header("location: /admin/EditProduct/".$_POST['edit_id']);
+            $this->redirect("/admin/EditProduct/".$_POST['edit_id']);
         }
     }
 
