@@ -1,4 +1,5 @@
 <?php
+error_reporting(0);
 class Admin extends CI_Controller {
     private $status_caption = array(
         1  => "Pending",
@@ -472,11 +473,11 @@ class Admin extends CI_Controller {
 
         if ($_POST['editServiceName'] == "" || $_POST['editServiceDescription'] == "" || $_POST['editServicePrice'] == "") {
             $_SESSION['message'] = "<div class='alert alert-warning errmess' role='alert'><center>Please enter valid information. Try again.</center></div>";
-            header("location: /admin/EditService/".$_POST['edit_id']);
+            $this->redirect("/admin/EditService/".$_POST['edit_id']);
         } else {
             $_SESSION['message'] = "<div class='alert alert-success errmess' role='alert'><center>Service successfully updated.</center></div>";
             $this->model->updateServiceDetails($_POST);
-            header("location: /admin/EditService/".$_POST['edit_id']);
+            $this->redirect("/admin/EditService/".$_POST['edit_id']);
         }
     }
     
