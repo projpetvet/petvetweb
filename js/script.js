@@ -254,7 +254,8 @@ $(document).ready(function ()
         var id = $(this).attr("data-id");
     });
 
-    $('#btnSaveDoctor').click(function () {
+    $('#addDoctorForm').submit(function()
+    {
         var firstName = $('#firstName').val();
         var lastName = $('#lastName').val();
         var mobileNumber = $('#mobileNumber').val();
@@ -274,40 +275,28 @@ $(document).ready(function ()
             $("#saveStatus").html('<div class="alert alert-warning">' +
                     '<strong>Please enter needed details. Try again.</strong>' +
                     '</div>');
-        } else
+            return false;
+        } 
+        else
         {
-            $.ajax({
-                url: "addNewDoctorDetails",
-                type: "POST",
-                data: {
-                    firstName: firstName,
-                    lastName: lastName,
-                    mobileNumber: mobileNumber,
-                    sun: sun,
-                    mon: mon,
-                    tues: tues,
-                    wed: wed,
-                    thurs: thurs,
-                    fri: fri,
-                    sat: sat,
-                    timeIn: timeIn,
-                    timeOut: timeOut
-                },
-                dataType: "json",
-                success: function (data)
-                {
-                    $("#saveStatus").html('<div class="alert alert-success">' +
-                            '<strong>' + data + '</strong>' +
-                            '</div>');
-                    $('#firstName').val("");
-                    $('#lastName').val("");
-                    $('#mobileNumber').val("");
-                    $('.dayOption').prop('checked', false);
-                    $('#timeIn').val("");
-                    $('#timeOut').val("");
-                }
-            });
+            var data = {
+                firstName: firstName,
+                lastName: lastName,
+                mobileNumber: mobileNumber,
+                sun: sun,
+                mon: mon,
+                tues: tues,
+                wed: wed,
+                thurs: thurs,
+                fri: fri,
+                sat: sat,
+                timeIn: timeIn,
+                timeOut: timeOut
+            };
+            $("#form_data_values").val(JSON.stringify(data));
+            return true;
         }
+        return false;
     });
 
     $('#btnSaveUser').click(function () {
