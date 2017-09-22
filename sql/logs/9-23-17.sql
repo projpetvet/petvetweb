@@ -1,0 +1,1 @@
+ALTER TABLE `doctor` ADD `image` VARCHAR(225) NOT NULL AFTER `enabled`;

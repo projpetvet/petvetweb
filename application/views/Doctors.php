@@ -13,6 +13,7 @@
             <table class="table table-striped">
                 <thead>
                     <tr class="tb-header">
+                        <th>Image</th>
                         <th>First Name</th>
                         <th>Last Name</th>
                         <th>Mobile Number</th>

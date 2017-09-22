@@ -186,6 +186,16 @@ class Admin extends CI_Controller {
         $doctorsdetails = $this->model->getDoctorDetails();
         foreach ($doctorsdetails->result() as $row) {
             $data = (array) $row;
+            $img = FCPATH."www/images/doctors/".$data['image'];
+            if(!file_exists($img) || (trim($data['image']) == ''))
+            {
+                $data['image'] = '/www/images/doctors/logo.png';
+            }
+            else
+            {
+                $data['image'] = '/www/images/doctors/'.$data['image'];
+            }
+            
             $doctors .= $this->load->view('lists/doctors', $data, true);
         }
         return $doctors;
@@ -522,7 +532,7 @@ class Admin extends CI_Controller {
             $this->load->view('Footer');
         }
     }
-
+    
     public function AddNewService() {
         if ($this->session->uname == NULL) {
             header('Location: /admin');
@@ -587,9 +597,31 @@ class Admin extends CI_Controller {
 
     public function AddNewDoctorDetails() {
         $data = array();
-        $data = $this->model->insertDoctorDetails($_POST);
-        echo json_encode($data);
+        $form_data = json_decode($_POST['form_data_values'],TRUE);
+        $form_data['image'] = $this->SaveDoctorImage();
+        $data = $this->model->insertDoctorDetails($form_data);
+        $this->messageRedirect("Doctor successfully added.","/admin/addNewDoctor");
         exit;
+    }
+    
+    public function SaveDoctorImage()
+    {
+        $config['upload_path'] = './www/images/doctors/';
+        $config['allowed_types'] = 'gif|jpg|png';
+        $config['max_size'] = 5000;
+        $config['max_width'] = 5000;
+        $config['max_height'] = 5000;
+
+        $this->load->library('upload', $config);
+
+        if ($this->upload->do_upload('userfile'))
+        {
+            return $this->upload->file_name;
+        }
+        else
+        {
+            return '';
+        }
     }
 
     public function removeDoctor() {
@@ -1646,6 +1678,16 @@ class Admin extends CI_Controller {
     {
         echo "
                 <script>
+                    window.location.href = '$url';
+                </script>
+            ";
+    }
+    
+    public function messageRedirect($msg,$url)
+    {
+        echo "
+                <script>
+                    alert('$msg');
                     window.location.href = '$url';
                 </script>
             ";

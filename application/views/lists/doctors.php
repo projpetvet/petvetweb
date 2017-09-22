@@ -1,4 +1,7 @@
 <tr id="doctor<?php echo $id; ?>">
+	<td id="image<?php echo $id; ?>">
+            <img src="<?php echo $image; ?>" style="width: 100px">
+        </td>
 	<td id="firstName<?php echo $id; ?>"><?php echo $firstname; ?></td>
 	<td id="lastName<?php echo $id; ?>"><?php echo $lastname; ?></td>
 	<td id="mobileNumber<?php echo $id; ?>"><?php echo $mobile; ?></td>
