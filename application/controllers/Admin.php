@@ -1004,7 +1004,7 @@ class Admin extends CI_Controller {
                 $stmt = $this->model->GetAppointmentById($id);
                 $result = $stmt->result()[0];
                 $result->app_date = date("M d o", strtotime($result->app_date));
-                $result->app_time = date("h:i a", strtotime($result->app_time));
+                $result->app_time = $this->model->GetTimeTableById($result->app_time);
                 $result->status_caption = $this->BuildAppStatusSelection($id,$result->status);
                 $data = array_merge($data, (array) $result);
                 $data['list'] = '';
