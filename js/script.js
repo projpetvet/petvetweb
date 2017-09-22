@@ -399,7 +399,7 @@ $(document).ready(function ()
         });
     });
 
-    $('#btnUpdateDoctor').click(function () {
+    $('#updateDoctorForm').submit(function () {
         var doctorid = $('#doctorId').val();
         var editFirstName = $('#editFirstName').val();
         var editLastName = $('#editLastName').val();
@@ -420,12 +420,11 @@ $(document).ready(function ()
             $("#editStatus").append('<div class="alert alert-warning">' +
                     '<strong>Please enter complete details. Try again.</strong>' +
                     '</div>');
-        } else
+            return false;
+        } 
+        else
         {
-            $.ajax({
-                url: "updateDoctor",
-                type: "POST",
-                data: {
+            var data = {
                     doctorid: doctorid,
                     editFirstName: editFirstName,
                     editLastName: editLastName,
@@ -439,19 +438,11 @@ $(document).ready(function ()
                     sat: sat,
                     timeIn: timeIn,
                     timeOut: timeOut
-                },
-                dataType: "json",
-                success: function (data)
-                {
-                    $("#editStatus").append('<div class="alert alert-success">' +
-                            '<strong>' + data + '</strong>' +
-                            '</div>');
-                    $("#firstName" + doctorid).html(editFirstName);
-                    $("#lastName" + doctorid).html(editLastName);
-                    $("#mobileNumber" + doctorid).html(editMobileNumber);
-                }
-            });
+                };
+            $("#form_data_values").val(JSON.stringify(data));
+            return true;
         }
+        return false;
     });
 
     $('#btnCloseEditDoctor').click(function () {

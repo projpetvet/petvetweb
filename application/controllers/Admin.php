@@ -599,8 +599,17 @@ class Admin extends CI_Controller {
         $data = array();
         $form_data = json_decode($_POST['form_data_values'],TRUE);
         $form_data['image'] = $this->SaveDoctorImage();
-        $data = $this->model->insertDoctorDetails($form_data);
+        $this->model->insertDoctorDetails($form_data);
         $this->messageRedirect("Doctor successfully added.","/admin/addNewDoctor");
+        exit;
+    }
+    
+    public function updateDoctor() {
+        $data = array();
+        $form_data = json_decode($_POST['form_data_values'],TRUE);
+        $form_data['image'] = $this->SaveDoctorImage();
+        $this->model->updateDoctorDetails($form_data);
+        $this->messageRedirect("Doctor successfully updated.","/admin/doctors");
         exit;
     }
     
@@ -634,13 +643,6 @@ class Admin extends CI_Controller {
     public function getDoctorDetails() {
         $data = array();
         $data = $this->model->selectDoctorDetails($_POST);
-        echo json_encode($data);
-        exit;
-    }
-
-    public function updateDoctor() {
-        $data = array();
-        $data = $this->model->updateDoctorDetails($_POST);
         echo json_encode($data);
         exit;
     }
