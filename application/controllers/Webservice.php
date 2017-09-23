@@ -577,7 +577,16 @@ class Webservice extends CI_Controller {
         else
         {
             $json_data['sched'] = array();
-            $stmt = $this->model->GetTimeTable($sched_date);
+            if(strtotime($date_now) == strtotime($sched_date))
+            {
+                $time = date("h:i:s");
+            }
+            else
+            {
+                $time = null;
+            }
+            
+            $stmt = $this->model->GetTimeTable($sched_date,$time);
             foreach ($stmt->result() as $row)
             {
                 if($row->ttaid == '')

@@ -677,15 +677,28 @@ Class WebserviceModel extends CI_Model {
         }
     }
     
-    public function GetTimeTable($date)
+    public function GetTimeTable($date,$time)
     {
         try
         {
-            $sql = "SELECT tt.*,tta.id as ttaid 
+            if($time == null)
+            {
+                $sql = "SELECT tt.*,tta.id as ttaid 
                     FROM time_table as tt 
                     LEFT JOIN time_table_appointments AS tta 
                     ON ((tt.id = tta.time_table_id) AND (tta.appointment_date = ?))";
-            $stmt = $this->pdo->query($sql,array($date));
+                $stmt = $this->pdo->query($sql,array($date));
+            }
+            else
+            {
+                $sql = "SELECT tt.*,tta.id as ttaid 
+                    FROM time_table as tt 
+                    LEFT JOIN time_table_appointments AS tta 
+                    ON ((tt.id = tta.time_table_id) AND (tta.appointment_date = ?))
+                    WHERE tt.time_start > ?";
+                $stmt = $this->pdo->query($sql,array($date,$time));
+            }
+            
             return $stmt;
         } 
         catch (Exception $ex) 
