@@ -281,6 +281,11 @@ class Webservice extends CI_Controller {
         $stmt = $this->model->GetDoctors();
         foreach($stmt->result() as $row)
         {
+            $img = FCPATH."www/images/doctors/".$row->image;
+            if(!file_exists($img) || (trim($row->image) == ''))
+            {
+                $row->image = '';
+            }
             array_push($json_data['doctor_list'], $row);
         }
         //services
