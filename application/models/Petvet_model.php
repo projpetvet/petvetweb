@@ -119,8 +119,8 @@ class Petvet_model extends CI_Model {
     public function addNewUserAdminDetails($data) {
         extract($data);
         $hashpassword = hash('sha1', $password);
-        $insertUser = "INSERT INTO user_admin(username, password, enabled) VALUES(?, ?, ?)";
-        $this->pdo->query($insertUser, array($userName, $hashpassword, 1));
+        $insertUser = "INSERT INTO user_admin(username, password, type, enabled) VALUES(?, ?, ?, ?)";
+        $this->pdo->query($insertUser, array($userName, $hashpassword, $userType, 1));
         return "New user admin successfully added.";
     }
 
@@ -164,7 +164,7 @@ class Petvet_model extends CI_Model {
     }
 
     public function getUserDetails() {
-        $selectUsers = $this->pdo->query("SELECT * FROM user_admin where enabled = 1");
+        $selectUsers = $this->pdo->query("SELECT * FROM user_admin where enabled = 1 ORDER BY type ASC,username ASC");
         return $selectUsers;
     }
 

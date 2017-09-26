@@ -301,6 +301,7 @@ $(document).ready(function ()
 
     $('#btnSaveUser').click(function () {
         var userName = $('#userName').val();
+        var userType = $('#userType').val();
         var password = $('#password').val();
         var confirmPassword = $('#confirmPassword').val();
 
@@ -315,11 +316,12 @@ $(document).ready(function ()
             if (password == confirmPassword)
             {
                 $.ajax({
-                    url: "addNewUserAdmin",
+                    url: "/admin/addNewUserAdmin",
                     type: "POST",
                     data: {
                         userName: userName,
-                        password: password
+                        password: password,
+                        userType : userType
                     },
                     dataType: "json",
                     success: function (data)

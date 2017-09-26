@@ -277,6 +277,15 @@ class Admin extends CI_Controller {
         $userdetails = $this->model->getUserDetails();
         foreach ($userdetails->result() as $row) {
             $data = (array) $row;
+            switch($data['type'])
+            {
+                case "1":
+                    $data['type_caption'] = 'Super Admin';
+                    break;
+                case "2":
+                    $data['type_caption'] = 'Admin';
+                    break;
+            }
             $users .= $this->load->view('lists/users', $data, true);
         }
         return $users;

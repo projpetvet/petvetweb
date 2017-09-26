@@ -15,6 +15,7 @@
                     <tr class="tb-header">
                         <th>User ID</th>
                         <th>Username</th>
+                        <th>User Type</th>
                         <th>Action</th>
                     </tr>
                 </thead>
