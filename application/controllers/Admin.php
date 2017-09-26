@@ -56,6 +56,7 @@ class Admin extends CI_Controller {
         foreach ($data as $user) {
             $row = (array) $user;
             $this->session->set_userdata('uname', $row["username"]);
+            $this->session->set_userdata('user_type', $row["type"]);
         }
         echo json_encode($data);
         exit;
@@ -63,6 +64,7 @@ class Admin extends CI_Controller {
 
     public function unsetSession() {
         $this->session->unset_userdata("uname");
+        $this->session->unset_userdata("user_type");
         exit;
     }
 

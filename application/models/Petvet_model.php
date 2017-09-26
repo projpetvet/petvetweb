@@ -12,7 +12,7 @@ class Petvet_model extends CI_Model {
     public function checkUserAdmin($data) {
         extract($data);
         $encodePassword = hash('sha1', $password);
-        $selectUser = $this->pdo->query("SELECT username, password FROM user_admin WHERE username = '$username' AND password = '$encodePassword' AND enabled = 1 ");
+        $selectUser = $this->pdo->query("SELECT username,type,password FROM user_admin WHERE username = '$username' AND password = '$encodePassword' AND enabled = 1 ");
         return $selectUser->result();
     }
 

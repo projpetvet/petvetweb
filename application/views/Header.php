@@ -72,9 +72,15 @@
                     <a href="/admin/breeds">
                         <li class="list-group-item">Breeds </li>
                     </a>
-                    <a href="/admin/useradmin">
-                        <li class="list-group-item">Admin Users </li>
-                    </a>
+                    <?php
+                        if($_SESSION['user_type'] == "1")
+                        {
+                            echo '
+                            <a href="/admin/useradmin">
+                                <li class="list-group-item">Admin Users </li>
+                            </a>';
+                        }
+                    ?>
                 </ul>
             </div>
         </div>
