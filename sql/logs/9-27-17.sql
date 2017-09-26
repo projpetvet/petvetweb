@@ -1,0 +1,1 @@
+ALTER TABLE `user_admin` ADD `type` TINYINT(1) NOT NULL DEFAULT '2' COMMENT '1 - superadmin, 2 - admin' AFTER `password`;
