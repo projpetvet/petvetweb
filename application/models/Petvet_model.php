@@ -568,9 +568,10 @@ class Petvet_model extends CI_Model {
             $password = sha1($password);
             $sql = "UPDATE user_admin
                     SET username = ?,
-                    password = ?
+                    password = ?,
+                    type = ?
                     WHERE id = ?";
-            $stmt = $this->pdo->query($sql,array($username,$password,$id));
+            $stmt = $this->pdo->query($sql,array($username,$password,$userType,$id));
             return $stmt;
         } 
         catch (Exception $ex) 

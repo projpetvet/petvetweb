@@ -803,6 +803,7 @@ $(document).ready(function ()
     $("#edituserform").submit(function(){
         var id = $("#edit_id").val();
         var username = $("#userName").val();
+        var userType = $("#userType").val();
         var password = $("#password").val();
         var cpassword = $("#confirmPassword").val();
         if(password != cpassword)
@@ -814,7 +815,8 @@ $(document).ready(function ()
             var data = {
                 id : id,
                 username : username,
-                password : password
+                password : password,
+                userType : userType
             };
             
             $.ajax({
