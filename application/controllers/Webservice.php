@@ -276,6 +276,7 @@ class Webservice extends CI_Controller {
     {
         $json_data = array();
         $json_data['success'] = TRUE;
+        $json_data['current_date'] = date("Y-m-d");
         //doctors
         $json_data['doctor_list'] = array();
         $stmt = $this->model->GetDoctors();
