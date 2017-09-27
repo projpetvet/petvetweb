@@ -56,14 +56,18 @@ class Admin extends CI_Controller {
         foreach ($data as $user) {
             $row = (array) $user;
             $this->session->set_userdata('uname', $row["username"]);
+            $this->session->set_userdata('user_id', $row["id"]);
             $this->session->set_userdata('user_type', $row["type"]);
+            $this->Logger("Logged in");
         }
         echo json_encode($data);
         exit;
     }
 
     public function unsetSession() {
+        $this->Logger("Logged out");
         $this->session->unset_userdata("uname");
+        $this->session->unset_userdata("user_id");
         $this->session->unset_userdata("user_type");
         exit;
     }
@@ -304,7 +308,9 @@ class Admin extends CI_Controller {
 
     public function saveNewMember() {
         $data = array();
-        $data = $this->model->saveMember($_POST);
+        $id = $this->model->saveMember($_POST);
+        $this->Logger("Added member with ID #".$id);
+        $data = "New member successfully added.";
         echo json_encode($data);
         exit;
     }
@@ -312,6 +318,7 @@ class Admin extends CI_Controller {
     public function removeMember() {
         $data = array();
         $data = $this->model->deleteMember($_POST);
+        $this->Logger("Deleted member with ID #".$_POST['memberid']);
         echo json_encode($data);
         exit;
     }
@@ -326,6 +333,7 @@ class Admin extends CI_Controller {
     public function updateMember() {
         $data = array();
         $data = $this->model->updateMemberDetails($_POST);
+        $this->Logger("Updated member with ID #".$_POST['id']);
         echo json_encode($data);
         exit;
     }
@@ -456,6 +464,7 @@ class Admin extends CI_Controller {
             $this->load->view('Footer');
             $upload = array();
             $upload = $this->model->saveProductDetails($_POST,$this->upload->file_name);
+            $this->Logger("Added product with ID #".$upload);
         }
     }
 
@@ -473,7 +482,8 @@ class Admin extends CI_Controller {
             header("location: /admin/AddNewService/");
         } else {
             $_SESSION['message'] = "<div class='alert alert-success errmess' role='alert'><center>New service successfully added.</center></div>";           
-            $this->model->saveServiceDetails($_POST, $this->upload->file_name);
+            $id = $this->model->saveServiceDetails($_POST, $this->upload->file_name);
+            $this->Logger("Added service with ID #".$id);
             header("location: /admin/AddNewService/");
         }
     }
@@ -498,6 +508,7 @@ class Admin extends CI_Controller {
         } else {
             $_SESSION['message'] = "<div class='alert alert-success errmess' role='alert'><center>Service successfully updated.</center></div>";
             $this->model->updateServiceDetails($_POST);
+            $this->Logger("Updated service with ID #".$_POST['edit_id']);
             $this->redirect("/admin/EditService/".$_POST['edit_id']);
         }
     }
@@ -523,6 +534,7 @@ class Admin extends CI_Controller {
         } else {
             $_SESSION['message'] = "<div class='alert alert-success errmess' role='alert'><center>Product successfully updated.</center></div>";
             $this->model->updateProductDetails($_POST);
+            $this->Logger("Updated product with ID #".$_POST['edit_id']);
             $this->redirect("/admin/EditProduct/".$_POST['edit_id']);
         }
     }
@@ -530,6 +542,7 @@ class Admin extends CI_Controller {
     public function removeProduct() {
         $data = array();
         $data = $this->model->deleteProduct($_POST);
+        $this->Logger("Deleted product with ID #".$_POST['productid']);
         echo json_encode($data);
         exit;
     }
@@ -610,7 +623,8 @@ class Admin extends CI_Controller {
         $data = array();
         $form_data = json_decode($_POST['form_data_values'],TRUE);
         $form_data['image'] = $this->SaveDoctorImage();
-        $this->model->insertDoctorDetails($form_data);
+        $id = $this->model->insertDoctorDetails($form_data);
+        $this->Logger("Added Doctor with ID #".$id);
         $this->messageRedirect("Doctor successfully added.","/admin/addNewDoctor");
         exit;
     }
@@ -620,6 +634,7 @@ class Admin extends CI_Controller {
         $form_data = json_decode($_POST['form_data_values'],TRUE);
         $form_data['image'] = $this->SaveDoctorImage();
         $this->model->updateDoctorDetails($form_data);
+        $this->Logger("Updated doctor with ID #".$form_data['doctorid']);
         $this->messageRedirect("Doctor successfully updated.","/admin/doctors");
         exit;
     }
@@ -647,6 +662,7 @@ class Admin extends CI_Controller {
     public function removeDoctor() {
         $data = array();
         $data = $this->model->deleteDoctorDetails($_POST);
+        $this->Logger("Deleted doctor with ID #".$_POST['doctorid']);
         echo json_encode($data);
         exit;
     }
@@ -674,7 +690,9 @@ class Admin extends CI_Controller {
 
     public function saveNewPet() {
         $data = array();
-        $data = $this->model->AddNewPetDetails($_POST);
+        $id = $this->model->AddNewPetDetails($_POST);
+        $this->Logger("Added pet with ID #".$id);
+        $data = "New pet successfully added.";
         echo json_encode($data);
         exit;
     }
@@ -689,6 +707,7 @@ class Admin extends CI_Controller {
     public function removePet() {
         $data = array();
         $data = $this->model->removePetDetails($_POST);
+        $this->Logger("Deleted pet with ID #".$_POST['petid']);
         echo json_encode($data);
         exit;
     }
@@ -703,6 +722,7 @@ class Admin extends CI_Controller {
     public function removeService() {
         $data = array();
         $data = $this->model->deleteService($_POST);
+        $this->Logger("Deleted service with ID #".$_POST['id']);
         echo json_encode($data);
         exit;
     }
@@ -896,6 +916,7 @@ class Admin extends CI_Controller {
     {
         $json_data = array();
         $json_data['success'] = $this->model->ChangeOrderStatus($_POST['order_id'],$_POST['status']);
+        $this->Logger("Changed order status of ID #".$_POST['order_id'].' to '.$this->status_caption[$_POST['status']]);
         //COMPLETED - deducts the items of products
         if($_POST['status'] == 4)
         {
@@ -921,6 +942,7 @@ class Admin extends CI_Controller {
     {
         $json_data = array();
         $json_data['success'] = $this->model->ChangeAppointmentStatus($_POST['app_id'],$_POST['status']);
+        $this->Logger("Changed appointment status of ID #".$_POST['app_id'].' to '.$this->app_status_caption[$_POST['status']]);
         if($json_data['success'])
         {
             if(($_POST['status'] == 3) || $_POST['status'] == 5)
@@ -1084,6 +1106,7 @@ class Admin extends CI_Controller {
     {
         $json_data = array();
         $json_data['success'] = $this->model->updatePetData($_POST);
+        $this->Logger("Updated pet with ID #".$_POST['id']);
         echo json_encode($json_data);
         exit;
     }
@@ -1112,7 +1135,7 @@ class Admin extends CI_Controller {
         $this->load->view('EditUserAdmin',$data);
         $this->load->view('Footer');
     }    
-    
+        
     public function Species()
     {
         if ($this->session->uname == NULL) {
@@ -1144,7 +1167,16 @@ class Admin extends CI_Controller {
     
     public function saveSpecie() {
         $json_data = array();
-        $json_data['success'] = $this->model->SaveSpecie($_POST['specie']);
+        $id = $this->model->SaveSpecie($_POST['specie']);
+        $this->Logger("Added specie with ID #".$id);
+        if($id > 0)
+        {
+            $json_data['success'] = TRUE;
+        }
+        else
+        {
+            $json_data['success'] = FALSE;
+        }
         echo json_encode($json_data);
         exit;
     }
@@ -1155,6 +1187,7 @@ class Admin extends CI_Controller {
         if(isset($_POST['id']) && isset($_POST['name']))
         {
             $json_data['success'] = $this->model->UpdateSpecie($_POST);
+            $this->Logger("Updated specie with ID #".$_POST['id']);
         }
         else
         {
@@ -1170,6 +1203,7 @@ class Admin extends CI_Controller {
         if(isset($_POST['id']))
         {
             $json_data['success'] = $this->model->DeleteSpecie($_POST['id']);
+            $this->Logger("Deleted specie with ID #".$_POST['id']);
         }
         else
         {
@@ -1241,7 +1275,16 @@ class Admin extends CI_Controller {
     
     public function saveBreed() {
         $json_data = array();
-        $json_data['success'] = $this->model->SaveBreed($_POST);
+        $id = $this->model->SaveBreed($_POST);
+        $this->Logger("Added breed with ID #".$id);
+        if($id > 0)
+        {
+            $json_data['success'] = TRUE;
+        }
+        else
+        {
+            $json_data['success'] = FALSE;
+        }
         echo json_encode($json_data);
         exit;
     }
@@ -1252,6 +1295,7 @@ class Admin extends CI_Controller {
         if(isset($_POST['id']) && isset($_POST['name']) && isset($_POST['specie']))
         {
             $json_data['success'] = $this->model->UpdateBreed($_POST);
+            $this->Logger("Updated breed with ID #".$_POST['id']);
         }
         else
         {
@@ -1267,6 +1311,7 @@ class Admin extends CI_Controller {
         if(isset($_POST['id']))
         {
             $json_data['success'] = $this->model->DeleteBreed($_POST['id']);
+            $this->Logger("Deleted breed with ID #".$_POST['id']);
         }
         else
         {
@@ -1493,7 +1538,8 @@ class Admin extends CI_Controller {
         {
             $_POST['description'] = htmlentities($_POST['description']);
             $ret = $this->model->SaveProductCategory($_POST);
-            if($ret)
+            $this->Logger("Added product category with ID #".$ret);
+            if($ret > 0)
             {
                 $_SESSION['message'] = $this->SuccessMessage('Product category successfully added.');
             }
@@ -1519,6 +1565,7 @@ class Admin extends CI_Controller {
             $ret = $this->model->UpdateProductCategory($_POST);
             if($ret)
             {
+                $this->Logger("Updated product category with ID #".$_POST['id']);
                 $_SESSION['message'] = $this->SuccessMessage('Product category successfully updated.');
             }
             else
@@ -1542,6 +1589,7 @@ class Admin extends CI_Controller {
         if(isset($_POST['id']))
         {
             $json_data['success'] = $this->model->RemoveCategory($_POST['id']);
+            $this->Logger("Deleted Product Category with ID #".$_POST['id']);
         }
         else
         {
@@ -1614,6 +1662,7 @@ class Admin extends CI_Controller {
         if(isset($_POST['id']))
         {
             $json_data['success'] = $this->model->RemoveServiceCategory($_POST['id']);
+            $this->Logger("Deleted service category with ID #".$_POST['id']);
         }
         else
         {
@@ -1630,7 +1679,8 @@ class Admin extends CI_Controller {
         {
             $_POST['description'] = htmlentities($_POST['description']);
             $ret = $this->model->SaveServiceCategory($_POST);
-            if($ret)
+            $this->Logger("Added service category with ID #".$ret);
+            if($ret > 0)
             {
                 $_SESSION['message'] = $this->SuccessMessage('Service category successfully added.');
             }
@@ -1656,6 +1706,7 @@ class Admin extends CI_Controller {
             $ret = $this->model->UpdateServiceCategory($_POST);
             if($ret)
             {
+                $this->Logger("Updated service category with ID #".$_POST['id']);
                 $_SESSION['message'] = $this->SuccessMessage('Service category successfully updated.');
             }
             else
@@ -1704,6 +1755,39 @@ class Admin extends CI_Controller {
                     window.location.href = '$url';
                 </script>
             ";
+    }
+    
+    public function ViewLogs()
+    {
+        if ($this->session->uname == NULL)
+        {
+            header('Location: /admin');
+        }
+        else if($this->session->user_type != "1")
+        {
+            header('Location: /admin');
+        }
+        else
+        {
+            $data = array();
+            $data['list'] = '';
+            $id = $GLOBALS['params'][0];
+            $stmt = $this->model->GetUserLogsById($id);
+            foreach ($stmt->result() as $row)
+            {
+                $data['list'] .= $this->load->view("ActivityList",$row,TRUE);
+            }
+            $this->load->view('Header');
+            $this->load->view('ActivityLogs',$data);
+            $this->load->view('Footer');
+        }
+    }    
+    
+    public function Logger($log)
+    {
+        $user_id = $this->session->user_id;
+        $log_date = date("Y-m-d h:i:s");
+        $this->model->Logger($user_id,$log,$log_date);
     }
 }
 

@@ -12,7 +12,7 @@ class Petvet_model extends CI_Model {
     public function checkUserAdmin($data) {
         extract($data);
         $encodePassword = hash('sha1', $password);
-        $selectUser = $this->pdo->query("SELECT username,type,password FROM user_admin WHERE username = '$username' AND password = '$encodePassword' AND enabled = 1 ");
+        $selectUser = $this->pdo->query("SELECT * FROM user_admin WHERE username = '$username' AND password = '$encodePassword' AND enabled = 1 ");
         return $selectUser->result();
     }
 
@@ -21,7 +21,7 @@ class Petvet_model extends CI_Model {
         $hashpassword = hash('sha1', $password);
         $insertMember = "INSERT INTO customer(lastName, firstName, address, mobile, email, username, password, enabled) VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
         $this->pdo->query($insertMember, array($lastName, $firstName, $address, $mobileNumber, $emailAddress, $userName, $hashpassword, 1));
-        return "New member successfully added.";
+        return $this->pdo->insert_id();
     }
 
     public function getMemberDetails() {
@@ -64,6 +64,7 @@ class Petvet_model extends CI_Model {
         $productDescriptionEncoded = htmlentities($productDescription);
         $insertProduct = "INSERT INTO product(name, description, price, stock, image, enabled, product_category) VALUES(?, ?, ?, ?, ?, ?,?)";
         $this->pdo->query($insertProduct, array($productName, $productDescriptionEncoded, $productPrice, $productStock, $savedImage, 1,$product_category));
+        return $this->pdo->insert_id();
     }
 
     public function saveServiceDetails($data,$savedImage) {
@@ -71,6 +72,7 @@ class Petvet_model extends CI_Model {
         $serviceDescriptionEncoded = htmlentities($serviceDescription);
         $insertService = "INSERT INTO service(name, description, price, image, enabled, service_category) VALUES(?, ?, ?, ?, ?,?)";
         $this->pdo->query($insertService, array($serviceName, $serviceDescriptionEncoded, $servicePrice, $savedImage, 1, $service_category));
+        return $this->pdo->insert_id();
     }
 
     public function updateServiceDetails($data) {
@@ -128,7 +130,8 @@ class Petvet_model extends CI_Model {
         extract($data);
         $insertDoctor = "INSERT INTO doctor(lastName, firstName, mobile, mon, tue, wed, thur, fri, sat, sun, time_in, time_out, enabled,image) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         $this->pdo->query($insertDoctor, array($lastName, $firstName, $mobileNumber, $mon, $tues, $wed, $thurs, $fri, $sat, $sun, $timeIn, $timeOut, 1, $image));
-        return "New doctor successfully added.";
+        $id = $this->pdo->insert_id();
+        return $id;
     }
 
     public function getDoctorDetails() {
@@ -201,7 +204,7 @@ class Petvet_model extends CI_Model {
 
         $insertPet = "INSERT INTO pet(owner_id, name, breed_id, specie_id, sex, color, birthday) VALUES(?, ?, ?, ?, ?, ?, ?)";
         $this->pdo->query($insertPet, array($ownerid, $petName, $breed, $specie, $petGender, $petColor, $petBirthday));
-        return "New pet successfully added.";
+        return $this->pdo->insert_id();
     }
 
     public function getPetDetails() {
@@ -635,7 +638,7 @@ class Petvet_model extends CI_Model {
         {
             $sql = "INSERT INTO specie SET name = ?";
             $stmt = $this->pdo->query($sql,array($specie));
-            return $stmt;
+            return $this->pdo->insert_id();
         } 
         catch (Exception $ex) 
         {
@@ -727,7 +730,7 @@ class Petvet_model extends CI_Model {
             extract($data);
             $sql = "INSERT INTO breed SET name = ?, specie_id = ?";
             $stmt = $this->pdo->query($sql,array($name,$specie));
-            return $stmt;
+            return $this->pdo->insert_id();
         } 
         catch (Exception $ex) 
         {
@@ -969,7 +972,7 @@ class Petvet_model extends CI_Model {
                                         description = ?
                                         ";
             $stmt = $this->pdo->query($sql,array($name,$description));
-            return $stmt;
+            return $this->pdo->insert_id();
         }
         catch (Exception $ex) {
             echo $ex;
@@ -1035,7 +1038,7 @@ class Petvet_model extends CI_Model {
                                         description = ?
                                         ";
             $stmt = $this->pdo->query($sql,array($name,$description));
-            return $stmt;
+            return $this->pdo->insert_id();
         }
         catch (Exception $ex) {
             echo $ex;
@@ -1122,6 +1125,39 @@ class Petvet_model extends CI_Model {
             {
                 return '';
             }
+        } 
+        catch (Exception $ex) 
+        {
+            echo $ex;
+            exit;
+        }
+    }
+    
+    public function Logger($user_id,$log,$log_date)
+    {
+        try
+        {
+            $sql = "INSERT INTO user_logs
+                    SET user_id = ?,
+                    log = ?,
+                    log_date = ?";
+            $stmt = $this->pdo->query($sql,array($user_id,$log,$log_date));
+            return $stmt;
+        } 
+        catch (Exception $ex) 
+        {
+            echo $ex;
+            exit;
+        }
+    }
+    
+    public function GetUserLogsById($user_id)
+    {
+        try
+        {
+            $sql = "SELECT * FROM user_logs where user_id = ? ORDER BY id DESC";
+            $stmt = $this->pdo->query($sql,array($user_id));
+            return $stmt;
         } 
         catch (Exception $ex) 
         {
